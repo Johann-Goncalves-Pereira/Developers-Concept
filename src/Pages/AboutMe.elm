@@ -1,6 +1,8 @@
 module Pages.AboutMe exposing (Model, Msg, page)
 
 import Gen.Params.AboutMe exposing (Params)
+import Gen.Route as Route
+import Layout exposing (initLayout)
 import Page
 import Request
 import Shared
@@ -50,4 +52,12 @@ update msg model =
 
 view : Model -> View Msg
 view model =
-    View.placeholder "AboutMe"
+    { title = "_home"
+    , body =
+        Layout.viewLayout
+            { initLayout
+                | route = Route.AboutMe
+                , mainAttrs = []
+                , mainContent = []
+            }
+    }

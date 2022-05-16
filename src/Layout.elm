@@ -1,7 +1,8 @@
 module Layout exposing (Model, initLayout, viewLayout)
 
+import Components.Svg as SVG
 import Gen.Route as Route exposing (Route)
-import Html exposing (Attribute, Html, a, div, h1, header, main_, nav, small, text)
+import Html exposing (Attribute, Html, a, button, div, h1, header, li, main_, nav, small, text, ul)
 import Html.Attributes exposing (class, classList, href, id, tabindex)
 import Regex
 
@@ -129,9 +130,11 @@ viewLayout model =
 viewHeader : Model msg -> Html msg
 viewHeader model =
     header [ class "root__header" ]
-        [ h1 [ class "root__header__title" ] [ text "johann-gonçalves-pereira" ]
-        , viewHeaderLinks model [ Route.Home_, Route.AboutMe, Route.Projects, Route.ContactMe ]
-            |> nav [ class "root__header__nav" ]
+        [ h1 [ class "flex items-center pl-[calc(1rem+1ch)] pr-4" ] [ text "johann-gonçalves-pereira" ]
+        , nav []
+            [ viewHeaderLinks model [ Route.Home_, Route.AboutMe, Route.Projects, Route.ContactMe ]
+                |> ul [ class "root__header__list" ]
+            ]
         ]
 
 
@@ -151,20 +154,24 @@ viewHeaderLinks model routes =
 
 viewLink : Link -> Html msg
 viewLink model =
-    a
-        [ class "root__header__links"
-        , classList
-            [ ( "root__header__links--current-page"
-              , isRoute model.routeReceived model.routeStatic
-              )
+    li [ class "item" ]
+        [ a
+            [ class "root__header__links"
+            , classList
+                [ ( "root__header__links--current-page"
+                  , isRoute model.routeReceived model.routeStatic
+                  )
+                ]
+            , href <| Route.toHref model.routeStatic
+            , tabindex 1
             ]
-        , href <| Route.toHref model.routeStatic
-        , tabindex 1
+            [ text model.routeName ]
         ]
-        [ text model.routeName ]
 
 
 viewFooter : Html msg
 viewFooter =
     div [ class "root__footer" ]
-        [ small [ class "root__footer__text" ] [ text "find me in:" ] ]
+        [ small [ class "root__footer__text" ] [ text "find me in:" ]
+        , button [] [ SVG.twitter ]
+        ]

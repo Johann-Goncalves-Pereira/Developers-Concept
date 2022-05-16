@@ -1,16 +1,16 @@
 module Pages.Home_ exposing (Model, Msg, page)
 
-import Components.Svg as SVG exposing (Logo(..))
+import Components.Svg as SVG
 import Gen.Params.Home_ exposing (Params)
 import Gen.Route as Route
 import Html exposing (Html, a, div, h1, h2, h5, section, text)
 import Html.Attributes exposing (class, href, id, rel, tabindex, target)
 import Html.Attributes.Aria exposing (ariaLabel, ariaLabelledby)
+import Layout exposing (initLayout)
 import Page
 import Request
 import Shared
 import Svg exposing (desc)
-import Layout exposing (initLayout)
 import View exposing (View)
 
 
@@ -57,7 +57,7 @@ update msg model =
 
 view : Model -> View Msg
 view model =
-    { title = "Revex - Home"
+    { title = "_home"
     , body =
         Layout.viewLayout
             { initLayout

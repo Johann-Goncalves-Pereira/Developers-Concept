@@ -7,6 +7,8 @@ import Shared
 import View exposing (View)
 
 
+import Gen.Route as Route
+import Layout exposing (initLayout)
 page : Shared.Model -> Request.With Params -> Page.With Model Msg
 page shared req =
     Page.sandbox
@@ -50,4 +52,12 @@ update msg model =
 
 view : Model -> View Msg
 view model =
-    View.placeholder "Projects"
+   { title = "_home"
+    , body =
+        Layout.viewLayout
+            { initLayout
+                | route = Route.Projects
+                , mainAttrs = []
+                , mainContent = []
+            }
+    }

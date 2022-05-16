@@ -1,6 +1,8 @@
 module Pages.ContactMe exposing (Model, Msg, page)
 
 import Gen.Params.ContactMe exposing (Params)
+import Gen.Route as Route
+import Layout exposing (initLayout)
 import Page
 import Request
 import Shared
@@ -50,4 +52,12 @@ update msg model =
 
 view : Model -> View Msg
 view model =
-    View.placeholder "ContactMe"
+    { title = "_home"
+    , body =
+        Layout.viewLayout
+            { initLayout
+                | route = Route.ContactMe
+                , mainAttrs = []
+                , mainContent = []
+            }
+    }
