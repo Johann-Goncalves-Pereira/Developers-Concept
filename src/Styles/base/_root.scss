@@ -3,15 +3,15 @@
 @use "../abstracts/" as *;
 
 body {
-	color: var(--clr-text-0);
-	background-color: var(--clr-surface-0);
+	color: var(--clr-primary-1);
+	background-color: var(--clr-secondary-3);
 	font-family: "Fira Code", monospace;
 }
 
 //! Main div with all the things
 #root {
 	display: block;
-	
+
 	color: inherit;
 	background-color: inherit;
 	font-family: inherit;

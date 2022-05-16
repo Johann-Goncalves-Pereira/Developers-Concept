@@ -3,7 +3,7 @@ function withOpacityValue(variable) {
     if (opacityValue === undefined) {
       return `hsl(var(${variable}))`;
     }
-    return `hsl(var(${variable}), ${opacityValue})`;
+    return `hsla(var(${variable}), ${opacityValue})`;
   };
 }
 
@@ -12,16 +12,24 @@ module.exports = {
   theme: {
     colors: {
       //& Surface
-      "surface-0": withOpacityValue("--clr-surface-0"),
-      "surface-1": withOpacityValue("--clr-surface-1"),
-      "surface-2": withOpacityValue("--clr-surface-2"),
-      "surface-3": withOpacityValue("--clr-surface-3"),
-      // & Text
-      "text-0": withOpacityValue("--clr-text-0"),
-      "text-1": withOpacityValue("--clr-text-1"),
-      "text-2": withOpacityValue("--clr-text-2"),
-      // & Brand
-      "brand-0": withOpacityValue("--clr-brand-0"),
+      "primary-0": withOpacityValue("--clr-primary-0-alpha"),
+      "primary-1": withOpacityValue("--clr-primary-1-alpha"),
+      "primary-2": withOpacityValue("--clr-primary-2-alpha"),
+      // & Secondary
+      "secondary-0": withOpacityValue("--clr-secondary-0-alpha"),
+      "secondary-1": withOpacityValue("--clr-secondary-1-alpha"),
+      "secondary-2": withOpacityValue("--clr-secondary-2-alpha"),
+      "secondary-3": withOpacityValue("--clr-secondary-3-alpha"),
+      // & Accent
+      "accent-0": withOpacityValue("--clr-accent-0-alpha"),
+      "accent-1": withOpacityValue("--clr-accent-1-alpha"),
+      "accent-2": withOpacityValue("--clr-accent-2-alpha"),
+      "accent-3": withOpacityValue("--clr-accent-3-alpha"),
+      // & Gradients
+      "gradients-0": withOpacityValue("--clr-gradients-0-alpha"),
+      "gradients-1": withOpacityValue("--clr-gradients-1-alpha"),
+      // & Lines
+      "lines-0": withOpacityValue("--clr-lines-0-alpha"),
     },
     extend: {},
   },

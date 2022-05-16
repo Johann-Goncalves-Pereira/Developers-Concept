@@ -10,7 +10,7 @@ import Page
 import Request
 import Shared
 import Svg exposing (desc)
-import UI exposing (pageConfig)
+import UI exposing (initLayout)
 import View exposing (View)
 
 
@@ -59,12 +59,10 @@ view : Model -> View Msg
 view model =
     { title = "Revex - Home"
     , body =
-        UI.layout
-            { pageConfig
+        UI.viewLayout
+            { initLayout
                 | route = Route.Home_
                 , mainAttrs = []
                 , mainContent = []
             }
     }
-
-    
