@@ -2,17 +2,17 @@
 
 @use "../abstracts/" as *;
 
-html body {
+body {
 	color: var(--clr-text-0);
-	background: var(--clr-surface-0);
+	background-color: var(--clr-surface-0);
+	font-family: "Fira Code", monospace;
 }
 
 //! Main div with all the things
 #root {
-	//? Now #root is the new base
-	position: absolute;
-	inset: 0;
-
-	font-family: "Fredoka", spotify-circular, spotify-circular-cyrillic, spotify-circular-arabic, spotify-circular-hebrew,
-		"Helvetica Neue", helvetica, arial, "Hiragino Kaku Gothic Pro", Meiryo, "MS Gothic", sans-serif;
+	display: block;
+	
+	color: inherit;
+	background-color: inherit;
+	font-family: inherit;
 }

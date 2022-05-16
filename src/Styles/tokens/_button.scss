@@ -1,0 +1,32 @@
+[class*="btn"] {
+	border-radius: var(--radius-btn, 0.5em);
+	color: var(--clr-text-btn, var(--clr-secondary-3));
+	background-color: var(--clr-bg-btn, hsl(210, 35%, 17%));
+	border: 1px solid var(--clr-border-btn, #00000000);
+
+	&:focus,
+	&:hover {
+		--clr-bg-btn: hsl(210, 36%, 23%);
+	}
+}
+
+.btn {
+	&--primary {
+		--clr-text-btn: hsl(208, 87%, 3%);
+		--clr-bg-btn: hsl(26, 99%, 68%);
+
+		&:focus,
+		&:hover {
+			--clr-bg-btn: hsl(26, 100%, 71%);
+		}
+	}
+
+	&--ghost {
+		--clr-bg-btn: #00000000;
+
+		&:focus,
+		&:hover {
+			--clr-border-btn: hsla(var(--clr-secondary-3-alpha), 0.5);
+		}
+	}
+}
