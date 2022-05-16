@@ -1,7 +1,7 @@
-module UI exposing (Model, initLayout, viewLayout)
+module Layout exposing (Model, initLayout, viewLayout)
 
 import Gen.Route as Route exposing (Route)
-import Html exposing (Attribute, Html, a, div, header, main_, nav, text)
+import Html exposing (Attribute, Html, a, div, h1, header, main_, nav, small, text)
 import Html.Attributes exposing (class, classList, href, id, tabindex)
 import Regex
 
@@ -12,6 +12,7 @@ import Regex
 
 type alias Model msg =
     { route : Route
+    , link : Link
     , mainContent : List (Html msg)
     , mainAttrs : List (Attribute msg)
     }
@@ -27,13 +28,14 @@ type alias Link =
 initLayout : Model msg
 initLayout =
     { route = Route.Home_
+    , link = initLink
     , mainContent = []
     , mainAttrs = []
     }
 
 
-defaultLink : Link
-defaultLink =
+initLink : Link
+initLink =
     { routeStatic = Route.Home_
     , routeReceived = Route.Home_
     , routeName = ""
@@ -50,6 +52,15 @@ isRoute route compare =
         ( Route.Home_, Route.Home_ ) ->
             True
 
+        ( Route.AboutMe, Route.AboutMe ) ->
+            True
+
+        ( Route.Projects, Route.Projects ) ->
+            True
+
+        ( Route.ContactMe, Route.ContactMe ) ->
+            True
+
         _ ->
             False
 
@@ -58,10 +69,16 @@ caseNamePage : Route -> String
 caseNamePage route =
     case route of
         Route.Home_ ->
-            "Home"
+            "_home"
 
-        Route.About ->
-            "About"
+        Route.AboutMe ->
+            "_about-me"
+
+        Route.Projects ->
+            "_projects"
+
+        Route.ContactMe ->
+            "_contact-me"
 
         Route.NotFound ->
             "Not Found"
@@ -79,7 +96,7 @@ userReplace userRegex replacer string =
 
 classBuilder : String -> String
 classBuilder string =
-    userReplace "[ ]" (\_ -> "-") string
+    userReplace "[_]" (\_ -> "") string
         |> String.toLower
 
 
@@ -104,6 +121,7 @@ viewLayout model =
         ]
         [ viewHeader model
         , main_ (mainClass :: model.mainAttrs) model.mainContent
+        , viewFooter
         ]
     ]
 
@@ -111,25 +129,24 @@ viewLayout model =
 viewHeader : Model msg -> Html msg
 viewHeader model =
     header [ class "root__header" ]
-        [ viewHeaderLinks model [ Route.Home_, Route.About ]
-            |> nav
-                [ class "root__header__nav"
-                ]
+        [ h1 [ class "root__header__title" ] [ text "johann-gonçalves-pereira" ]
+        , viewHeaderLinks model [ Route.Home_, Route.AboutMe, Route.Projects, Route.ContactMe ]
+            |> nav [ class "root__header__nav" ]
         ]
 
 
 viewHeaderLinks : Model msg -> List Route -> List (Html msg)
-viewHeaderLinks model links =
+viewHeaderLinks model routes =
     List.map
         (\staticRoute ->
             viewLink
-                { defaultLink
+                { initLink
                     | routeName = caseNamePage staticRoute
                     , routeStatic = staticRoute
                     , routeReceived = model.route
                 }
         )
-        links
+        routes
 
 
 viewLink : Link -> Html msg
@@ -145,3 +162,9 @@ viewLink model =
         , tabindex 1
         ]
         [ text model.routeName ]
+
+
+viewFooter : Html msg
+viewFooter =
+    div [ class "root__footer" ]
+        [ small [ class "root__footer__text" ] [ text "find me in:" ] ]
