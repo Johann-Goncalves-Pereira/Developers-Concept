@@ -130,10 +130,10 @@ viewLayout model =
 viewHeader : Model msg -> Html msg
 viewHeader model =
     header [ class "root__header" ]
-        [ h1 [ class "flex items-center pl-[calc(1rem+1ch)] pr-4" ] [ text "johann-gonçalves-pereira" ]
+        [ h1 [ class "flex items-center px-[calc(1rem+1ch)] text-secondary-0" ] [ text "johann-gonçalves-pereira" ]
         , nav []
             [ viewHeaderLinks model [ Route.Home_, Route.AboutMe, Route.Projects, Route.ContactMe ]
-                |> ul [ class "root__header__list" ]
+                |> ul [ class "list" ]
             ]
         ]
 
@@ -154,11 +154,11 @@ viewHeaderLinks model routes =
 
 viewLink : Link -> Html msg
 viewLink model =
-    li [ class "item" ]
+    li [ class "list__item" ]
         [ a
-            [ class "root__header__links"
+            [ class "list__links"
             , classList
-                [ ( "root__header__links--current-page"
+                [ ( "list__links--current-page"
                   , isRoute model.routeReceived model.routeStatic
                   )
                 ]
@@ -172,6 +172,10 @@ viewLink model =
 viewFooter : Html msg
 viewFooter =
     div [ class "root__footer" ]
-        [ small [ class "root__footer__text" ] [ text "find me in:" ]
-        , button [] [ SVG.twitter ]
+        [ small [ class "flex items-center px-[calc(1rem+1ch)] py-4 text-secondary-0" ] [ text "find me in:" ]
+        , nav [ class "nav" ]
+            [ a [ class "nav__link p-4" ] [ SVG.twitter ]
+            , a [ class "nav__link p-4" ] [ SVG.discord ]
+            , a [ class "nav__link px-[calc(1rem+1ch)] py-4" ] [ text "@Johann-Gonçalves-Pereira", SVG.github ]
+            ]
         ]
