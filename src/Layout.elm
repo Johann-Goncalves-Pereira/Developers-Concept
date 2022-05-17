@@ -70,7 +70,7 @@ caseNamePage : Route -> String
 caseNamePage route =
     case route of
         Route.Home_ ->
-            "_home"
+            "_hello"
 
         Route.AboutMe ->
             "_about-me"

@@ -57,7 +57,7 @@ update msg model =
 
 view : Model -> View Msg
 view model =
-    { title = "_home"
+    { title = "_hello"
     , body =
         Layout.viewLayout
             { initLayout
