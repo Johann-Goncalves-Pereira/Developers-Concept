@@ -1,0 +1,8 @@
+:root,
+[class*="border-default"] {
+	--border-base: var(--border-width, 1px) var(--border-style, solid) var(--border--color, var(--clr-lines-0));
+}
+
+[class*="border-default"] {
+	border: var(--border-base);
+}

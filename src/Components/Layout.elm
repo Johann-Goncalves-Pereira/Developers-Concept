@@ -1,4 +1,4 @@
-module Layout exposing (Model, initLayout, viewLayout)
+module Components.Layout exposing (Model, initLayout, viewLayout)
 
 import Components.Svg as SVG
 import Gen.Route as Route exposing (Route)

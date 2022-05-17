@@ -1,8 +1,8 @@
 module Pages.ContactMe exposing (Model, Msg, page)
 
+import Components.Layout exposing (initLayout)
 import Gen.Params.ContactMe exposing (Params)
 import Gen.Route as Route
-import Layout exposing (initLayout)
 import Page
 import Request
 import Shared
@@ -54,7 +54,7 @@ view : Model -> View Msg
 view model =
     { title = "_contact-me"
     , body =
-        Layout.viewLayout
+        Components.Layout.viewLayout
             { initLayout
                 | route = Route.ContactMe
                 , mainAttrs = []

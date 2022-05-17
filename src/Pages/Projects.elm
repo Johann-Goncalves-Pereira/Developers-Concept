@@ -8,7 +8,7 @@ import View exposing (View)
 
 
 import Gen.Route as Route
-import Layout exposing (initLayout)
+import Components.Layout exposing (initLayout)
 page : Shared.Model -> Request.With Params -> Page.With Model Msg
 page shared req =
     Page.sandbox
@@ -54,7 +54,7 @@ view : Model -> View Msg
 view model =
    { title = "_projects"
     , body =
-        Layout.viewLayout
+        Components.Layout.viewLayout
             { initLayout
                 | route = Route.Projects
                 , mainAttrs = []

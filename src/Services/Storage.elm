@@ -1,4 +1,4 @@
-port module Storage exposing (..)
+port module Services.Storage exposing (..)
 
 import Json.Decode as Json
 import Json.Encode as Encode

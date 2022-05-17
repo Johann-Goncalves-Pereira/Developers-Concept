@@ -1,6 +1,6 @@
-//? Here is I use to make the base elements of the page;
-
 @use "../abstracts" as *;
+
+//& Body
 
 body {
 	display: grid;
@@ -12,7 +12,8 @@ body {
 	background-color: var(--clr-primary-0);
 }
 
-//! Main div with all the things
+//& ROOT
+
 .root {
 	position: relative;
 
@@ -23,7 +24,7 @@ body {
 	height: calc(100vh - Max(0.75rem, 1vh));
 
 	border-radius: 0.5rem;
-	border: 1px solid var(--clr-lines-0);
+	border: var(--border-base);
 
 	color: inherit;
 	font-family: inherit;
@@ -38,5 +39,220 @@ body {
 
 	@include media(lg) {
 		font-size: 1rem;
+	}
+}
+
+//& HEADER
+
+.root__header {
+	position: relative;
+	display: grid;
+	grid-template-columns: 1fr auto;
+
+	border-bottom: var(--border-base);
+
+	@include media(lg) {
+		grid-template-columns: 20rem auto;
+	}
+
+	.lines {
+		position: relative;
+
+		display: grid;
+		place-content: center;
+		grid-column-start: 2;
+
+		padding: 1.5rem;
+
+		svg {
+			$s: 1rem;
+			position: absolute;
+			inset: 0;
+			margin: auto;
+			width: $s;
+			height: $s;
+			transition: transform 200ms ease;
+
+			&:first-child {
+				transform: scale(0) rotate(360deg);
+			}
+			&:last-child {
+				transform: scale(1.5) rotate(0deg);
+			}
+		}
+
+		@include media(lg) {
+			display: none;
+		}
+
+		&__input {
+			position: absolute;
+
+			margin: 0;
+			width: 50px;
+			height: 48px;
+
+			opacity: 0;
+
+			grid-column-start: 2;
+
+			z-index: var(--layer-3);
+
+			&:checked {
+				& ~ .lines svg {
+					&:first-child {
+						transform: scale(1) rotate(0deg);
+					}
+					&:last-child {
+						transform: scale(0) rotate(360deg);
+					}
+				}
+
+				& ~ .list-nav {
+					display: none;
+					@include media(lg) {
+						display: block;
+					}
+				}
+			}
+		}
+	}
+
+	.list {
+		&-nav {
+			position: absolute;
+			top: calc(100% + 1px);
+			inset-inline: 0;
+			background-color: var(--clr-primary-1);
+
+			@include media(lg) {
+				position: sticky;
+				background-color: transparent;
+			}
+		}
+
+		display: grid;
+
+		@include media(lg) {
+			grid-template-columns: repeat(3, auto) 1fr auto;
+		}
+
+		&__item {
+			border-bottom: var(--border-base);
+			user-select: none !important;
+
+			@include media(lg) {
+				border-bottom-width: 0;
+				border-left: var(--border-base);
+
+				&:nth-child(3) {
+					border-right: var(--border-base);
+				}
+			}
+
+			&:last-child {
+				grid-column-start: -1;
+			}
+		}
+
+		&__links {
+			display: block;
+			padding: 1rem;
+			padding-right: 1.25rem;
+
+			color: var(--clr-secondary-0);
+
+			text-decoration: none;
+
+			background-image: linear-gradient(var(--clr-accent-0), var(--clr-accent-0));
+			background-repeat: no-repeat;
+			background-size: 100%;
+			background-position-y: 4rem;
+
+			transition-duration: 300ms;
+			transition-timing-function: var(--ease-squish-1);
+			transition-property: background-position-y, color;
+
+			--bg-py-base: 2.875rem;
+			--bg-py-hover: 2.75rem;
+			--bg-py-hidden: 4rem;
+
+			@include media(lg) {
+				--bg-py-base: 3.125rem;
+				--bg-py-hover: 3rem;
+			}
+
+			&:hover {
+				background-position-y: var(--bg-py-base);
+				color: var(--clr-secondary-3);
+			}
+
+			&--current-page {
+				animation: bg-slide-in 1000ms ease forwards;
+				color: var(--clr-secondary-3);
+			}
+
+			@keyframes bg-slide-in {
+				$invert: 80%;
+				0%,
+				100% {
+					background-position-y: var(--bg-py-base);
+				}
+
+				20% {
+					background-position-y: var(--bg-py-hover);
+				}
+
+				#{$invert} {
+					background-position-y: var(--bg-py-hidden);
+				}
+				#{$invert + 1} {
+					background-position-y: calc(var(--bg-py-hidden) * -1);
+				}
+			}
+		}
+	}
+}
+
+//& FOOTER
+
+.root__footer {
+	display: grid;
+	grid-template-columns: auto 1fr;
+
+	border-top: var(--border-base);
+
+	small {
+		display: grid;
+		place-items: center;
+	}
+
+	.nav {
+		display: grid;
+		grid-template-columns: repeat(2, auto) 1fr auto;
+
+		&__link {
+			display: flex;
+			align-items: center;
+			gap: 1rem;
+
+			border-left: var(--border-base);
+			color: var(--clr-secondary-0);
+			text-decoration: none;
+
+			svg {
+				$s: 1.5rem;
+				width: $s;
+				height: $s;
+			}
+
+			&:nth-child(2) {
+				border-right: var(--border-base);
+			}
+
+			&:last-child {
+				grid-column-start: -1;
+			}
+		}
 	}
 }

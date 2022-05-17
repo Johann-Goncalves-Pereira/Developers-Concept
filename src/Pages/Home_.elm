@@ -1,12 +1,12 @@
 module Pages.Home_ exposing (Model, Msg, page)
 
+import Components.Layout exposing (initLayout)
 import Components.Svg as SVG
 import Gen.Params.Home_ exposing (Params)
 import Gen.Route as Route
 import Html exposing (Html, a, div, h1, h2, h5, section, text)
 import Html.Attributes exposing (class, href, id, rel, tabindex, target)
 import Html.Attributes.Aria exposing (ariaLabel, ariaLabelledby)
-import Layout exposing (initLayout)
 import Page
 import Request
 import Shared
@@ -59,7 +59,7 @@ view : Model -> View Msg
 view model =
     { title = "_hello"
     , body =
-        Layout.viewLayout
+        Components.Layout.viewLayout
             { initLayout
                 | route = Route.Home_
                 , mainAttrs = []
