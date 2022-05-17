@@ -37,7 +37,7 @@
 		transition: opacity 100ms var(--ease-elastic-1);
 	}
 
-	:is(&:focus, &:hover) svg {
+	:is(&:focus, &:hover) > svg {
 		opacity: 1;
 	}
 }

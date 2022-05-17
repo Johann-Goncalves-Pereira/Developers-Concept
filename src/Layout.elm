@@ -2,8 +2,8 @@ module Layout exposing (Model, initLayout, viewLayout)
 
 import Components.Svg as SVG
 import Gen.Route as Route exposing (Route)
-import Html exposing (Attribute, Html, a, button, div, h1, header, li, main_, nav, small, text, ul)
-import Html.Attributes exposing (class, classList, href, id, tabindex)
+import Html exposing (Attribute, Html, a, div, h1, header, input, li, main_, nav, small, span, text, ul)
+import Html.Attributes exposing (class, classList, href, id, tabindex, type_)
 import Regex
 
 
@@ -137,17 +137,17 @@ viewHeader model =
     header [ class "root__header" ]
         [ h1
             [ classTail
-                [ "flex"
-                , "items-center"
+                [ "py-4"
                 , "px-[calc(1rem+1ch)]"
                 , "text-secondary-0"
                 , "cursor-default"
                 , "select-none"
-                , "pointer-events-none"
                 ]
             ]
             [ text "johann-gonçalves-pereira" ]
-        , nav []
+        , input [ class "lines__input block lg:hidden", type_ "checkbox" ] []
+        , div [ class "lines" ] [ SVG.threeLines, SVG.x ]
+        , nav [ class "list-nav col-span-2  lg:col-span-1" ]
             [ viewHeaderLinks model [ Route.Home_, Route.AboutMe, Route.Projects, Route.ContactMe ]
                 |> ul [ class "list" ]
             ]
@@ -190,19 +190,18 @@ viewFooter =
     div [ class "root__footer" ]
         [ small
             [ classTail
-                [ "flex"
-                , "items-center"
+                [ "py-4"
                 , "px-[calc(1rem+1ch)]"
                 , "text-secondary-0"
                 , "cursor-default"
                 , "select-none"
-                , "pointer-events-none"
                 ]
             ]
             [ text "find me in:" ]
         , nav [ class "nav" ]
             [ a [ class "nav__link p-4", href "#" ] [ SVG.twitter ]
             , a [ class "nav__link p-4", href "#" ] [ SVG.discord ]
-            , a [ class "nav__link px-[calc(1rem+1ch)] py-4", href "#" ] [ text "@Johann-Goncalves-Pereira", SVG.github ]
+            , a [ class "nav__link px-[calc(1rem+1ch)] py-4", href "#" ]
+                [ span [ class "hidden lg:block" ] [ text "@Johann-Goncalves-Pereira" ], SVG.github ]
             ]
         ]

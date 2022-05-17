@@ -1,6 +1,6 @@
 //? Here is I use to make the base elements of the page;
 
-@use "../abstracts/" as *;
+@use "../abstracts" as *;
 
 body {
 	display: grid;
@@ -29,4 +29,14 @@ body {
 	font-family: inherit;
 
 	background-color: var(--clr-primary-1);
+
+	font-size: 0.75rem;
+
+	@include media(md) {
+		font-size: 0.875rem;
+	}
+
+	@include media(lg) {
+		font-size: 1rem;
+	}
 }
