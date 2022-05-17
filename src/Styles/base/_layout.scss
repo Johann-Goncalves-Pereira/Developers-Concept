@@ -24,7 +24,7 @@ $border: 1px solid var(--clr-lines-0);
 		&__links {
 			display: block;
 			padding: 1rem;
-			padding-right: calc(1rem + 1ch);
+			padding-right: 1.25rem;
 
 			color: var(--clr-secondary-0);
 
@@ -88,6 +88,7 @@ $border: 1px solid var(--clr-lines-0);
 		&__link {
 			display: flex;
 			align-items: center;
+			gap: 1rem;
 			border-left: $border;
 			color: var(--clr-secondary-0);
 			text-decoration: none;

@@ -30,3 +30,14 @@
 		}
 	}
 }
+
+:is(a, button) {
+	& > svg {
+		opacity: 0.5;
+		transition: opacity 100ms var(--ease-elastic-1);
+	}
+
+	:is(&:focus, &:hover) svg {
+		opacity: 1;
+	}
+}

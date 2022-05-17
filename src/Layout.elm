@@ -127,10 +127,26 @@ viewLayout model =
     ]
 
 
+classTail : List String -> Attribute msg
+classTail list =
+    class <| String.join " " list
+
+
 viewHeader : Model msg -> Html msg
 viewHeader model =
     header [ class "root__header" ]
-        [ h1 [ class "flex items-center px-[calc(1rem+1ch)] text-secondary-0" ] [ text "johann-gonçalves-pereira" ]
+        [ h1
+            [ classTail
+                [ "flex"
+                , "items-center"
+                , "px-[calc(1rem+1ch)]"
+                , "text-secondary-0"
+                , "cursor-default"
+                , "select-none"
+                , "pointer-events-none"
+                ]
+            ]
+            [ text "johann-gonçalves-pereira" ]
         , nav []
             [ viewHeaderLinks model [ Route.Home_, Route.AboutMe, Route.Projects, Route.ContactMe ]
                 |> ul [ class "list" ]
@@ -172,10 +188,21 @@ viewLink model =
 viewFooter : Html msg
 viewFooter =
     div [ class "root__footer" ]
-        [ small [ class "flex items-center px-[calc(1rem+1ch)] py-4 text-secondary-0" ] [ text "find me in:" ]
+        [ small
+            [ classTail
+                [ "flex"
+                , "items-center"
+                , "px-[calc(1rem+1ch)]"
+                , "text-secondary-0"
+                , "cursor-default"
+                , "select-none"
+                , "pointer-events-none"
+                ]
+            ]
+            [ text "find me in:" ]
         , nav [ class "nav" ]
-            [ a [ class "nav__link p-4" ] [ SVG.twitter ]
-            , a [ class "nav__link p-4" ] [ SVG.discord ]
-            , a [ class "nav__link px-[calc(1rem+1ch)] py-4" ] [ text "@Johann-Gonçalves-Pereira", SVG.github ]
+            [ a [ class "nav__link p-4", href "#" ] [ SVG.twitter ]
+            , a [ class "nav__link p-4", href "#" ] [ SVG.discord ]
+            , a [ class "nav__link px-[calc(1rem+1ch)] py-4", href "#" ] [ text "@Johann-Goncalves-Pereira", SVG.github ]
             ]
         ]
