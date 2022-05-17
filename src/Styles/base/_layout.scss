@@ -35,7 +35,8 @@ $border: 1px solid var(--clr-lines-0);
 			background-size: 100%;
 			background-position-y: 4rem;
 
-			transition: 300ms cubic-bezier(0.63, -0.23, 0.4, 1.76);
+			transition-duration: 300ms;
+			transition-timing-function: var(--ease-squish-1);
 			transition-property: background-position-y, color;
 
 			&:hover {
