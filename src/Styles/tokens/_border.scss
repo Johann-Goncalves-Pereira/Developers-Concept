@@ -6,3 +6,9 @@
 [class*="border-default"] {
 	border: var(--border-base);
 }
+
+:root {
+	@for $i from 1 through 6 {
+		--radius-local-#{$i}: #{$i * 2}px;
+	}
+}
