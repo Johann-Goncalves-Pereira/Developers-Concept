@@ -1,0 +1,48 @@
+@use "../abstracts" as *;
+
+.root__footer {
+	display: grid;
+	grid-template-columns: auto min-content;
+
+	@include media(sm) {
+		grid-template-columns: auto 1fr;
+	}
+
+	border-top: var(--border-base);
+
+	small {
+		display: grid;
+		place-items: center;
+	}
+
+	.nav {
+		display: grid;
+		grid-template-columns: repeat(2, auto) 1fr auto;
+
+		&__link {
+			display: flex;
+			align-items: center;
+			gap: 1rem;
+
+			border-left: var(--border-base);
+			color: var(--clr-secondary-0);
+			text-decoration: none;
+
+			svg {
+				$s: 1.5rem;
+				width: $s;
+				height: $s;
+			}
+
+			@include media(sm) {
+				&:nth-child(2) {
+					border-right: var(--border-base);
+				}
+			}
+
+			&:last-child {
+				grid-column-start: -1;
+			}
+		}
+	}
+}

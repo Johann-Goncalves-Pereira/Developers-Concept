@@ -31,7 +31,10 @@ module.exports = {
       // & Lines
       "lines-0": withOpacityValue("--clr-lines-0-alpha"),
     },
-    extend: {},
+    fontWeight: {
+      "medium-less": 450,
+    },
+    // extend: {},
   },
   plugins: [],
   corePlugins: {

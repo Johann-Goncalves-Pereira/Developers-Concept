@@ -1,0 +1,86 @@
+.elmsh-hl {
+	background: #343434;
+}
+.elmsh-add {
+	background: #003800;
+}
+.elmsh-del {
+	background: #380000;
+}
+
+.elmsh1 {
+	color: #ae81ff;
+}
+
+.elmsh2 {
+	color: #ff0000;
+}
+.elmsh3 {
+	color: #ffa500;
+}
+
+.elmsh4 {
+	color: #66d9ef;
+}
+
+.elmsh5 {
+	color: #f92672;
+}
+
+.elmsh6 {
+	color: #ae81ff;
+}
+.elmsh7 {
+	color: #fd971f;
+}
+
+.elmsh-js-ce {
+	font-style: italic;
+	color: #a6e22e;
+}
+.elmsh-css-ar-i {
+	font-weight: bold;
+	color: #f92672;
+}
+
+//& Discover keys
+
+// Comment
+.elmsh-comm {
+	color: var(--clr-secondary-0);
+}
+
+// Signals
+.elmsh3 {
+	color: var(--clr-secondary-0);
+}
+
+//& Base ~ <code> container
+.elmsh {
+	color: var(--clr-secondary-3);
+	font-weight: 500;
+	// white-space: pre-line;
+	white-space: pre;
+}
+
+//& ELM
+
+// elm function
+.elmsh-elm-f {
+	color: var(--clr-secondary-2);
+}
+
+// elm production
+.elmsh-elm-ts {
+	color: var(--clr-accent-1);
+}
+
+// elm string
+.elmsh-elm-s {
+	color: var(--clr-accent-2);
+}
+
+// elm []
+.elmsh-elm-gs {
+	color: var(--clr-secondary-0);
+}
