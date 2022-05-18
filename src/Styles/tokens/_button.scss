@@ -1,8 +1,15 @@
 [class*="btn"] {
+	$property: color, background-color, border;
+
 	border-radius: var(--radius-btn, 0.5em);
 	color: var(--clr-text-btn, var(--clr-secondary-3));
 	background-color: var(--clr-bg-btn, hsl(210, 35%, 17%));
 	border: 1px solid var(--clr-border-btn, #00000000);
+
+	will-change: $property;
+	transition-property: $property;
+	transition-duration: 200ms;
+	transition-timing-function: var(--ease-elastic-1);
 
 	&:focus,
 	&:hover {
@@ -23,10 +30,12 @@
 
 	&--ghost {
 		--clr-bg-btn: #00000000;
+		--clr-border-btn: var(--clr-secondary-3);
 
 		&:focus,
 		&:hover {
 			--clr-border-btn: hsla(var(--clr-secondary-3-alpha), 0.5);
+			--clr-bg-btn: #00000000;
 		}
 	}
 }

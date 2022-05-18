@@ -8,6 +8,7 @@
 }
 
 :root {
+	--radius-full: 100vw;
 	@for $i from 1 through 6 {
 		--radius-local-#{$i}: #{$i * 2}px;
 	}
