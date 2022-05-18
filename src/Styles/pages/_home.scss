@@ -1,4 +1,5 @@
 @use "../abstracts" as *;
+@use "sass:math" as *;
 
 .main--hello {
 	position: relative;
@@ -46,20 +47,24 @@
 }
 
 .game-container {
+	$space-info: 1rem;
+
 	display: none;
 
 	@include media(lg) {
+		$space-container: 1.875rem;
+
 		position: relative;
 		z-index: var(--layer-1);
 
 		display: grid;
 		grid-template-columns: 3fr 2fr;
-		gap: 1.875rem;
+		gap: $space-container;
 
 		border-radius: var(--radius-local-4);
 		border: 1px solid var(--clr-primary-0);
 		margin: auto;
-		padding: 1.875rem;
+		padding: $space-container;
 
 		width: Min(100%, 50rem);
 		height: fit-content;
@@ -127,11 +132,15 @@
 	}
 
 	.info {
+		display: grid;
+		grid-template-rows: auto auto 1fr auto;
+		gap: inherit;
+
 		&__keyboard {
 			display: grid;
 
 			border-radius: var(--radius-local-4);
-			padding: 1rem;
+			padding: $space-info;
 
 			background: hsla(var(--clr-primary-0-alpha), 0.19);
 
@@ -188,6 +197,83 @@
 						transform: rotate(#{($i + 1) * 90}deg);
 					}
 				}
+			}
+		}
+	}
+
+	.score {
+		display: grid;
+		gap: $space-info;
+		padding-inline: $space-info;
+
+		&__grid {
+			$padding: 1rem;
+			display: grid;
+			align-items: center;
+			grid-template-columns: repeat(5, max-content);
+			gap: $padding $padding * 1.5;
+
+			// width: 100%;
+		}
+	}
+
+	.pulse {
+		position: relative;
+		z-index: var(--layer-2);
+
+		width: 10px;
+		aspect-ratio: 1;
+		background-color: var(--clr-accent-1);
+		border-radius: var(--radius-full);
+
+		&::before,
+		&::after {
+			content: "";
+			position: absolute;
+			inset: 0;
+			z-index: var(--layer-negative-1);
+
+			border-radius: inherit;
+			background-color: inherit;
+			animation: pulse 1000ms infinite -1650ms;
+			animation-play-state: paused;
+		}
+
+		&:focus,
+		&:hover {
+			&::before,
+			&::after {
+				will-change: transform, opacity;
+				animation-fill-mode: forwards;
+				animation-play-state: running;
+			}
+
+			&::after {
+				animation-delay: 655ms;
+			}
+		}
+
+		@for $i from 0 through 3 {
+			$amount: 10 - $i;
+
+			&:nth-child(#{$amount}) {
+				opacity: 0.4;
+			}
+		}
+
+		@keyframes pulse {
+			0% {
+				transform: scale(0.9);
+				opacity: 0.9;
+			}
+
+			90% {
+				transform: scale(2.5);
+			}
+
+			100% {
+				transform: scale(3.5);
+				opacity: 0;
 			}
 		}
 	}
