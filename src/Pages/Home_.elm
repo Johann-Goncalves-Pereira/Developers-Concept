@@ -4,20 +4,18 @@ import Components.Layout exposing (initLayout)
 import Components.Svg as SVG
 import Gen.Params.Home_ exposing (Params)
 import Gen.Route as Route
-import Html exposing (Html, a, button, div, h1, h2, h3, h5, p, section, span, text)
-import Html.Attributes exposing (class, href, id, rel, tabindex, target)
-import Html.Attributes.Aria exposing (ariaLabel, ariaLabelledby)
+import Html exposing (Html, a, button, div, h2, h3, p, span, text)
+import Html.Attributes exposing (class, href, target)
 import Page
 import Request
 import Shared
-import Svg exposing (desc)
-import SyntaxHighlight exposing (elm, javascript)
+import SyntaxHighlight exposing (elm)
 import Utils.Highlight exposing (codeHighlight)
 import View exposing (View)
 
 
 page : Shared.Model -> Request.With Params -> Page.With Model Msg
-page shared req =
+page _ _ =
     Page.sandbox
         { init = init
         , update = update

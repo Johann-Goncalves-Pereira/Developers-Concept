@@ -1,4 +1,4 @@
-module Components.Layout exposing (Model, initLayout, viewLayout)
+module Components.Layout exposing (Model, headerUsernameId, initLayout, viewLayout)
 
 import Components.Svg as SVG
 import Gen.Route as Route exposing (Route)
@@ -75,6 +75,9 @@ caseNamePage route =
         Route.AboutMe ->
             "_about-me"
 
+        Route.AboutMe__ReadMe_ default ->
+            "_about-me--" ++ default.readMe
+
         Route.Projects ->
             "_projects"
 
@@ -131,6 +134,11 @@ classTail list =
     class <| String.join " " list
 
 
+headerUsernameId : String
+headerUsernameId =
+    "header-username"
+
+
 viewHeader : Model msg -> Html msg
 viewHeader model =
     header [ class "root__header" ]
@@ -143,6 +151,7 @@ viewHeader model =
                 , "select-none"
                 , "pointer-events-none"
                 ]
+            , id headerUsernameId
             ]
             [ text "johann-gonçalves", span [ class "hidden md:inline-block" ] [ text "-pereira" ] ]
         , input [ class "lines__input block md:hidden", type_ "checkbox" ] []
