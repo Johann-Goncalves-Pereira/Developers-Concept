@@ -10,6 +10,7 @@
 	gap: Max(1rem, 5vw + 1rem);
 
 	padding-inline: 2rem;
+	padding-block: calc(3vh + 1rem);
 	z-index: 0;
 
 	&::before,
@@ -48,7 +49,6 @@
 
 .game-container {
 	$space-info: 1rem;
-
 	display: none;
 
 	@include media(lg) {
@@ -67,7 +67,7 @@
 		padding: $space-container;
 
 		width: Min(100%, 50rem);
-		height: fit-content;
+		height: Min(100%, 50rem);
 
 		// width: 80%;
 		// height: 80%;
@@ -133,7 +133,8 @@
 
 	.info {
 		display: grid;
-		grid-template-rows: auto auto 1fr auto;
+		grid-template-rows: repeat(2, auto) 1fr auto;
+
 		gap: inherit;
 
 		&__keyboard {
@@ -212,8 +213,6 @@
 			align-items: center;
 			grid-template-columns: repeat(5, max-content);
 			gap: $padding $padding * 1.5;
-
-			// width: 100%;
 		}
 	}
 

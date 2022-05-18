@@ -11,6 +11,8 @@
 	transition-duration: 200ms;
 	transition-timing-function: var(--ease-elastic-1);
 
+	user-select: none;
+
 	&:focus,
 	&:hover {
 		--clr-bg-btn: hsl(210, 36%, 23%);

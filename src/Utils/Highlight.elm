@@ -1,8 +1,8 @@
 module Utils.Highlight exposing (..)
 
-import Html exposing (Html, code, div, p, text)
+import Html exposing (Html, code, text)
 import Parser exposing (DeadEnd)
-import SyntaxHighlight exposing (HCode, elm, monokai, oneDark, toBlockHtml, toInlineHtml, useTheme)
+import SyntaxHighlight exposing (HCode, toInlineHtml)
 
 
 codeHighlight : (String -> Result (List DeadEnd) HCode) -> String -> Html msg

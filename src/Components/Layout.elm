@@ -142,6 +142,7 @@ viewHeader model =
                 , "text-secondary-0"
                 , "cursor-default"
                 , "select-none"
+                , "pointer-events-none"
                 ]
             ]
             [ text "johann-gonçalves", span [ class "hidden md:inline-block" ] [ text "-pereira" ] ]
@@ -195,6 +196,7 @@ viewFooter =
                 , "text-secondary-0"
                 , "cursor-default"
                 , "select-none"
+                , "pointer-events-none"
                 ]
             ]
             [ text "find me in:" ]
