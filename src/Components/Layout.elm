@@ -115,8 +115,7 @@ viewLayout model =
     [ div
         [ id "root"
         , classList
-            [ ( "scroll", True )
-            , ( "root", True )
+            [ ( "root", True )
             , ( "root--" ++ classBuilder (caseNamePage model.route), True )
             ]
         ]
@@ -173,7 +172,7 @@ viewLink : Link -> Html msg
 viewLink model =
     li [ class "list__item" ]
         [ a
-            [ class "list__links"
+            [ class "list__links "
             , classList
                 [ ( "list__links--current-page"
                   , isRoute model.routeReceived model.routeStatic

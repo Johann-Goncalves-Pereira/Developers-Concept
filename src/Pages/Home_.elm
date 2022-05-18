@@ -64,6 +64,7 @@ view model =
         Components.Layout.viewLayout
             { initLayout
                 | route = Route.Home_
+                , mainAttrs = [ class "scroll-custom" ]
                 , mainContent = viewPage model
             }
     }

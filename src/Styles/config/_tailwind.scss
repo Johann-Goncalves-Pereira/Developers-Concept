@@ -9,4 +9,28 @@
 	.row-end-last {
 		grid-row-end: -1;
 	}
+	.scroll-custom {
+		overflow: auto;
+		overflow: overlay;
+
+		scrollbar-color: var(--clr-secondary-0);
+
+		&::-webkit-scrollbar {
+			width: 1rem;
+			background-color: transparent;
+
+			border-left: var(--border-base);
+			background-clip: padding-box;
+
+			&-thumb {
+				$border-width: 4px;
+				background-color: var(--clr-secondary-0);
+				border-color: transparent;
+				border-style: solid;
+				border-width: $border-width;
+				border-right-width: $border-width - 1;
+				background-clip: padding-box;
+			}
+		}
+	}
 }
