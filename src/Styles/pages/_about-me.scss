@@ -1,0 +1,81 @@
+.main--about-me {
+	--tabs-height: 2.5rem;
+
+	display: grid;
+	grid-template-columns: var(--header-username, 19.0625rem) 1fr 1fr;
+}
+
+.main--about-me .sidebar {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	border-right: var(--border-base);
+
+	&__buttons {
+		display: grid;
+		grid-template-rows: repeat(3, auto) 1fr;
+		border-right: inherit;
+	}
+
+	&__explorer {
+		$line-gap: 0.75rem;
+
+		.header {
+			display: grid;
+			border-bottom: var(--border-base);
+
+			height: var(--tabs-height);
+
+			&__button {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+				padding-inline: 1rem;
+
+				path {
+					fill: var(--clr-secondary-3);
+				}
+			}
+		}
+
+		.explorer {
+			display: grid;
+			gap: 1rem;
+			padding: 1.5rem 1.25rem;
+			color: var(--clr-secondary-0);
+
+			&__directory {
+				display: grid;
+				align-items: center;
+				grid-template-columns: auto auto 1fr;
+				gap: $line-gap;
+
+				&:nth-child(1) {
+					.svg-directory {
+						fill: var(--clr-accent-2);
+					}
+				}
+				&:nth-child(2) {
+					.svg-directory {
+						fill: var(--clr-accent-1);
+					}
+				}
+				&:nth-child(3) {
+					.svg-directory {
+						fill: var(--clr-secondary-2);
+					}
+				}
+			}
+
+			&__nested {
+				grid-column-start: 2;
+				grid-column-end: -1;
+			}
+		}
+
+		.file {
+			display: flex;
+			align-items: center;
+			gap: $line-gap;
+		}
+	}
+}

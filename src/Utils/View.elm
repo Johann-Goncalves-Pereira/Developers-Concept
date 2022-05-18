@@ -1,4 +1,4 @@
-module Utils.View exposing (..)
+module Utils.View exposing (customProp, customProps)
 
 import Html exposing (Attribute)
 import Html.Attributes exposing (attribute)
@@ -12,4 +12,10 @@ customProps listProps =
         )
         ""
         listProps
+        |> attribute "style"
+
+
+customProp : ( String, String ) -> Attribute msg
+customProp ( p, v ) =
+    String.concat [ "--", p, ":", v, ";" ]
         |> attribute "style"
