@@ -4,7 +4,7 @@ import Components.Layout exposing (initLayout)
 import Components.Svg as SVG
 import Gen.Params.Home_ exposing (Params)
 import Gen.Route as Route
-import Html exposing (Html, a, button, div, h1, h2, h3, h5, p, section, text)
+import Html exposing (Html, a, button, div, h1, h2, h3, h5, p, section, span, text)
 import Html.Attributes exposing (class, href, id, rel, tabindex, target)
 import Html.Attributes.Aria exposing (ariaLabel, ariaLabelledby)
 import Page
@@ -77,13 +77,19 @@ viewPage model =
 viewPresentation : Model -> Html Msg
 viewPresentation model =
     div [ class "grid gap-16 m-auto lg:mr-0 z-10" ]
-        [ div []
-            [ p [ class "font-medium-less" ] [ text "Hi all. I am" ]
-            , h2 [ class "text-6xl font-normal" ] [ text "Johann Gonçalves" ]
-            , h3 [ class "text-4xl leading-snug  text-secondary-2 font-medium-less" ]
+        [ div [ class "pointer-events-none" ]
+            [ p [ class "font-450 select-none" ] [ text "Hi all. I am" ]
+            , h2 [ class "text-6xl font-400 select-none" ]
+                [ text "Johann Gonçalves", span [ class "hidden 2xl:block" ] [ text "Pereira" ] ]
+            , h3 [ class "text-4xl leading-snug  text-secondary-2 font-450 select-none" ]
                 [ text "|> Front-end developer" ]
             ]
-        , codeHighlight elm viewCode
+        , a
+            [ class "no-underline select-none cursor-pointer"
+            , href "https://github.com/Johann-Goncalves-Pereira/Developers-Concept"
+            , target "_blank"
+            ]
+            [ codeHighlight elm viewCode ]
         ]
 
 
@@ -121,13 +127,13 @@ viewGame model =
                     |> div [ class "arrows" ]
                 ]
             , div [ class "score" ]
-                [ p [ class "text-sm pointer-events-none select-none font-normal" ]
+                [ p [ class "text-sm pointer-events-none select-none font-500" ]
                     [ text "// food left" ]
                 , div [ class "pulse" ] []
                     |> List.repeat (5 * 2)
                     |> div [ class "score__grid" ]
                 ]
-            , div [ class "btn--ghost w-fit px-3 py-1 row-start-[-1] ml-auto font" ]
+            , div [ class "btn--ghost w-fit px-3 py-1 row-end-last ml-auto font-500" ]
                 [ text "skip" ]
             ]
         ]

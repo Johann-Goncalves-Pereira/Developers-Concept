@@ -6,11 +6,12 @@ body {
 	display: grid;
 	place-content: center;
 
-	color: var(--clr-secondary-3);
-	font-family: "Fira Code", monospace;
+	overflow: hidden;
 
+	color: var(--clr-secondary-3);
 	background-color: var(--clr-primary-0);
 
+	font-family: "Fira Code", monospace;
 	font-variant-ligatures: contextual;
 }
 
