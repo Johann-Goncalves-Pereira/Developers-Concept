@@ -7,11 +7,18 @@
 	display: grid;
 	grid-auto-flow: column;
 	grid-auto-columns: 1fr;
-	gap: Max(1rem, 5vw + 1rem);
+	gap: Max(1rem, 7vw + 1rem);
 
 	padding-inline: 2rem;
 	padding-block: calc(3vh + 1rem);
 	z-index: 0;
+
+	overflow-y: auto;
+	overflow-y: overlay;
+
+	@include media(sm, false) {
+		overflow: hidden;
+	}
 
 	&::before,
 	&::after {
@@ -68,9 +75,6 @@
 
 		width: Min(100%, 50rem);
 		height: Min(100%, 50rem);
-
-		// width: 80%;
-		// height: 80%;
 
 		background: linear-gradient(150.26deg, rgba(23, 85, 83, 0.7) 1.7%, rgba(67, 217, 173, 0.091) 81.82%);
 		box-shadow: inset 0px 2px 0px rgba(255, 255, 255, 0.3);

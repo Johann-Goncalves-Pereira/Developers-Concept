@@ -9,11 +9,17 @@ $media: (
 	3xl: 1920px,
 );
 
-@mixin media($breakpoint) {
+@mixin media($breakpoint, $axis-x: true) {
 	@each $breakpoints, $size in $media {
 		@if $breakpoint==$breakpoints {
-			@media screen and (min-width: $size) {
-				@content;
+			@if $axis-x {
+				@media screen and (min-width: $size) {
+					@content;
+				}
+			} @else {
+				@media screen and (min-height: $size) {
+					@content;
+				}
 			}
 		}
 	}
