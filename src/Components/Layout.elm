@@ -75,8 +75,8 @@ caseNamePage route =
         Route.AboutMe ->
             "_about-me"
 
-        Route.AboutMe__ReadMe_ default ->
-            "_about-me--" ++ default.readMe
+        Route.AboutMe__File_ path_ ->
+            "about-me - " ++ path_.file
 
         Route.Projects ->
             "_projects"
