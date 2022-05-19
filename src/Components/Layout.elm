@@ -56,6 +56,9 @@ isRoute route compare =
         ( Route.AboutMe, Route.AboutMe ) ->
             True
 
+        ( Route.AboutMe, Route.AboutMe__File_ _ ) ->
+            True
+
         ( Route.Projects, Route.Projects ) ->
             True
 
