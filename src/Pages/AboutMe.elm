@@ -5,7 +5,7 @@ import Components.Layout as Layout exposing (headerUsernameId, initLayout)
 import Components.Svg as SVG
 import Gen.Params.AboutMe exposing (Params)
 import Gen.Route as Route exposing (Route)
-import Html exposing (Attribute, Html, a, button, div, h4, header, li, section, text, ul)
+import Html exposing (Attribute, Html, a, button, div, h4, header, li, section, span, text, ul)
 import Html.Attributes exposing (class, classList, href, id)
 import Html.Attributes.Aria exposing (ariaLabelledby)
 import Html.Events exposing (onClick)
@@ -33,13 +33,20 @@ page _ req =
 
 
 
--- INIT
+-- MODEL
 
 
 type alias Model =
     { headerUsernameWidth : Float
     , currentFile : String
     , showExplorer : Bool
+    , folder : Folders
+    }
+
+
+type alias Folders =
+    { bio : Bool
+    , project : Bool
     }
 
 
@@ -48,6 +55,7 @@ init =
     ( { headerUsernameWidth = 304
       , currentFile = ""
       , showExplorer = True
+      , folder = { bio = True, project = True }
       }
     , Cmd.batch
         [ BrowserDom.getElement headerUsernameId
@@ -65,10 +73,16 @@ type Msg
     | TryGetHeaderAgain
     | ChangeCurrentFile String
     | ToggleExplorer Bool
+    | ToggleBio Bool
+    | ToggleProject Bool
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
+    let
+        f =
+            model.folder
+    in
     case msg of
         GetHeaderUsernameWidth result ->
             case result of
@@ -76,7 +90,9 @@ update msg model =
                     ( model, Cmd.none )
 
                 Ok size ->
-                    ( { model | headerUsernameWidth = size.element.width }, Cmd.none )
+                    ( { model | headerUsernameWidth = size.element.width }
+                    , Cmd.none
+                    )
 
         TryGetHeaderAgain ->
             ( model
@@ -89,6 +105,16 @@ update msg model =
 
         ToggleExplorer showExplorer_ ->
             ( { model | showExplorer = not showExplorer_ }, Cmd.none )
+
+        ToggleBio toggler_ ->
+            ( { model | folder = { f | bio = not toggler_ } }
+            , Cmd.none
+            )
+
+        ToggleProject toggler_ ->
+            ( { model | folder = { f | project = not toggler_ } }
+            , Cmd.none
+            )
 
 
 
@@ -181,8 +207,8 @@ viewSidebarExplorer model =
         , if model.showExplorer then
             ul [ class "explorer" ] <|
                 List.map
-                    (\{ folder, files } ->
-                        viewDirectory folder <|
+                    (\{ folder, msg, showFile, files } ->
+                        viewDirectory folder msg showFile <|
                             List.map
                                 (\name ->
                                     viewListFiles model name
@@ -190,9 +216,13 @@ viewSidebarExplorer model =
                                 files
                     )
                     [ { folder = "bio"
+                      , msg = ToggleBio model.folder.bio
+                      , showFile = model.folder.bio
                       , files = [ "university", "github", "gitlab" ]
                       }
                     , { folder = "projects"
+                      , msg = ToggleProject model.folder.project
+                      , showFile = model.folder.project
                       , files = [ "kelpie", "materialize" ]
                       }
                     ]
@@ -204,13 +234,25 @@ viewSidebarExplorer model =
         ]
 
 
-viewDirectory : String -> List (Html Msg) -> Html Msg
-viewDirectory folderName files =
+viewDirectory : String -> Msg -> Bool -> List (Html Msg) -> Html Msg
+viewDirectory folderName msg showFiles files =
     li [ class "explorer__directory" ]
-        [ SVG.lineArrow
-        , SVG.directory
-        , text folderName
-        , ul [ class "explorer__nested" ] files
+        [ button
+            [ classList
+                [ ( "explorer__folders", True )
+                , ( "explorer__folders--active", not showFiles )
+                ]
+            , onClick msg
+            ]
+            [ SVG.lineArrow
+            , SVG.directory
+            , span [ class "mr-auto" ] [ text folderName ]
+            ]
+        , if showFiles then
+            ul [ class "explorer__nested" ] files
+
+          else
+            text ""
         ]
 
 

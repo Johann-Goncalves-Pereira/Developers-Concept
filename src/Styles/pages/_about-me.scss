@@ -55,9 +55,9 @@
 
 			&__directory {
 				display: grid;
-				align-items: center;
-				grid-template-columns: auto auto 1fr;
-				gap: $line-gap * 0.5 $line-gap;
+				gap: $line-gap * 0.5 0;
+
+				grid-template-columns: $line-gap * 2 1fr;
 
 				&:nth-child(1) {
 					.svg-directory {
@@ -76,11 +76,32 @@
 				}
 			}
 
+			&__folders {
+				display: grid;
+				align-items: center;
+				grid-template-columns: min-content auto 1fr;
+				gap: $line-gap * 0.25 $line-gap;
+				grid-column: 1 / -1;
+				justify-content: flex-start;
+				padding: 0;
+
+				&--active {
+					color: var(--clr-secondary-0);
+					.line-arrow-svg {
+						transform: rotate(270deg);
+					}
+				}
+			}
+
 			&__nested {
 				display: grid;
 				gap: $line-gap * 0.5;
 				grid-column-start: 2;
 				grid-column-end: -1;
+
+				.file__link {
+					gap: $line-gap;
+				}
 			}
 		}
 
@@ -88,7 +109,7 @@
 			&__link {
 				display: flex;
 				align-items: center;
-				gap: $line-gap;
+				gap: $line-gap * 0.5;
 
 				white-space: nowrap;
 				overflow: hidden;

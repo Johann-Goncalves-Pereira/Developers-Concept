@@ -89,7 +89,7 @@ arrow =
 
 lineArrow : Html msg
 lineArrow =
-    svg [ width "14", height "14", viewBox "0 0 14 14", fill "none" ] [ Svg.path [ d "M6.99974 8.06084L11.9497 3.11084L13.3637 4.52484L6.99974 10.8888L0.635742 4.52484L2.04974 3.11084L6.99974 8.06084Z", fill "#607B96" ] [] ]
+    svg [ width "14", height "14", viewBox "0 0 14 14", fill "none", class "line-arrow-svg" ] [ Svg.path [ d "M6.99974 8.06084L11.9497 3.11084L13.3637 4.52484L6.99974 10.8888L0.635742 4.52484L2.04974 3.11084L6.99974 8.06084Z", fill "#607B96" ] [] ]
 
 
 x : Html msg
