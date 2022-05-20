@@ -1,12 +1,12 @@
-module Pages.AboutMe exposing (Model, Msg, page)
+module Pages.AboutMe exposing (Model, Msg, init, mainAttrs, page, update, viewPage)
 
 import Browser.Dom as BrowserDom exposing (Element, Error)
 import Components.Layout as Layout exposing (headerUsernameId, initLayout)
 import Components.Svg as SVG
 import Gen.Params.AboutMe exposing (Params)
-import Gen.Route as Route
-import Html exposing (Html, button, div, h4, header, li, section, text, ul)
-import Html.Attributes exposing (class, id)
+import Gen.Route as Route exposing (Route)
+import Html exposing (Attribute, Html, a, button, div, h4, header, li, section, text, ul)
+import Html.Attributes exposing (class, href, id)
 import Html.Attributes.Aria exposing (ariaLabelledby)
 import Page
 import Platform exposing (Task)
@@ -146,20 +146,41 @@ viewSidebarExplorer =
                 ]
             ]
         , ul [ class "explorer" ]
-            [ viewDirectory
-            , li [ class "file" ] [ SVG.markdown, text "README.md" ]
+            [ viewDirectory <| [ viewListFiles "university" ]
+            , viewListFiles "README.md"
             ]
         ]
 
 
-viewDirectory : Html Msg
-viewDirectory =
+viewDirectory : List (Html Msg) -> Html Msg
+viewDirectory files =
     li [ class "explorer__directory" ]
-        [ SVG.lineArrow, SVG.directory, text "bio", viewListFiles "university" ]
+        [ SVG.lineArrow
+        , SVG.directory
+        , text "bio"
+        , ul [ class "explorer__nested" ] files
+        ]
 
 
 viewListFiles : String -> Html Msg
 viewListFiles filename =
-    ul [ class "explorer__nested" ]
-        [ li [ class "file" ] [ SVG.markdown, text filename ]
+    li [ class "file" ]
+        [ a
+            [ class "file__link"
+            , Route.AboutMe__File_ { file = filename }
+                |> Route.toHref
+                |> href
+            ]
+            [ SVG.markdown, text filename ]
         ]
+
+
+mainAttrs : Model -> List (Attribute Msg)
+mainAttrs model =
+    [ customProp
+        ( "header-username"
+        , String.fromFloat
+            (model.headerUsernameWidth + 1)
+            ++ "px"
+        )
+    ]
