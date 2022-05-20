@@ -31,23 +31,33 @@
 				gap: 0.5rem;
 				padding-inline: 1rem;
 
-				path {
-					fill: var(--clr-secondary-3);
+				&:not(&--active) {
+					path {
+						fill: var(--clr-secondary-3);
+					}
+				}
+
+				&--active {
+					color: var(--clr-secondary-0);
+					svg {
+						transform: rotate(270deg);
+					}
 				}
 			}
 		}
 
 		.explorer {
 			display: grid;
-			gap: 1rem;
+			gap: $line-gap;
 			padding: 1.5rem 1.25rem;
 			color: var(--clr-secondary-0);
+			user-select: none;
 
 			&__directory {
 				display: grid;
 				align-items: center;
 				grid-template-columns: auto auto 1fr;
-				gap: $line-gap;
+				gap: $line-gap * 0.5 $line-gap;
 
 				&:nth-child(1) {
 					.svg-directory {
@@ -67,6 +77,8 @@
 			}
 
 			&__nested {
+				display: grid;
+				gap: $line-gap * 0.5;
 				grid-column-start: 2;
 				grid-column-end: -1;
 			}
@@ -77,6 +89,20 @@
 				display: flex;
 				align-items: center;
 				gap: $line-gap;
+
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				text-decoration: none;
+				user-select: none;
+
+				&--active {
+					color: var(--clr-secondary-3);
+
+					svg {
+						opacity: 1;
+					}
+				}
 			}
 		}
 	}
