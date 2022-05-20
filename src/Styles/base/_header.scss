@@ -42,10 +42,10 @@
 			transition: transform 200ms ease;
 
 			&:first-child {
-				transform: scale(0) rotate(360deg);
+				transform: scale(1) rotate(0deg);
 			}
 			&:last-child {
-				transform: scale(1.5) rotate(0deg);
+				transform: scale(0) rotate(360deg);
 			}
 		}
 
@@ -78,17 +78,23 @@
 			&:checked {
 				& ~ .lines svg {
 					&:first-child {
-						transform: scale(1) rotate(0deg);
+						transform: scale(0) rotate(360deg);
 					}
 					&:last-child {
-						transform: scale(0) rotate(360deg);
+						transform: scale(1.5) rotate(0deg);
 					}
 				}
 
 				& ~ .list-nav {
-					display: none;
+					position: absolute;
+					top: calc(100% + 1px);
+					inset-inline: 0;
+					display: block;
+					background-color: var(--clr-primary-1);
+
 					@include media(md) {
-						display: block;
+						position: sticky;
+						background-color: transparent;
 					}
 				}
 			}
@@ -97,14 +103,9 @@
 
 	.list {
 		&-nav {
-			position: absolute;
-			top: calc(100% + 1px);
-			inset-inline: 0;
-			background-color: var(--clr-primary-1);
-
+			display: none;
 			@include media(md) {
-				position: sticky;
-				background-color: transparent;
+				display: block;
 			}
 		}
 
