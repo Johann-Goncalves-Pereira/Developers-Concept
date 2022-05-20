@@ -31,23 +31,33 @@
 				gap: 0.5rem;
 				padding-inline: 1rem;
 
-				path {
-					fill: var(--clr-secondary-3);
+				&:not(&--active) {
+					path {
+						fill: var(--clr-secondary-3);
+					}
+				}
+
+				&--active {
+					color: var(--clr-secondary-0);
+					svg {
+						transform: rotate(270deg);
+					}
 				}
 			}
 		}
 
 		.explorer {
 			display: grid;
-			gap: 1rem;
+			gap: $line-gap;
 			padding: 1.5rem 1.25rem;
 			color: var(--clr-secondary-0);
+			user-select: none;
 
 			&__directory {
 				display: grid;
-				align-items: center;
-				grid-template-columns: auto auto 1fr;
-				gap: $line-gap;
+				gap: $line-gap * 0.5 0;
+
+				grid-template-columns: $line-gap * 2 1fr;
 
 				&:nth-child(1) {
 					.svg-directory {
@@ -66,9 +76,32 @@
 				}
 			}
 
+			&__folders {
+				display: grid;
+				align-items: center;
+				grid-template-columns: min-content auto 1fr;
+				gap: $line-gap * 0.25 $line-gap;
+				grid-column: 1 / -1;
+				justify-content: flex-start;
+				padding: 0;
+
+				&--active {
+					color: var(--clr-secondary-0);
+					.line-arrow-svg {
+						transform: rotate(270deg);
+					}
+				}
+			}
+
 			&__nested {
+				display: grid;
+				gap: $line-gap * 0.5;
 				grid-column-start: 2;
 				grid-column-end: -1;
+
+				.file__link {
+					gap: $line-gap;
+				}
 			}
 		}
 
@@ -76,7 +109,21 @@
 			&__link {
 				display: flex;
 				align-items: center;
-				gap: $line-gap;
+				gap: $line-gap * 0.5;
+
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				text-decoration: none;
+				user-select: none;
+
+				&--active {
+					color: var(--clr-secondary-3);
+
+					svg {
+						opacity: 1;
+					}
+				}
 			}
 		}
 	}

@@ -1,10 +1,11 @@
 module Pages.AboutMe.File_ exposing (Model, Msg, page)
 
 import Components.Layout as Layout exposing (initLayout)
+import Components.Svg exposing (github)
 import Gen.Params.AboutMe.File_ exposing (Params)
 import Gen.Route as Route exposing (Route)
 import Html exposing (Attribute, Html, div, p, text)
-import Html.Attributes as Attributes
+import Html.Attributes as Attributes exposing (class)
 import Page
 import Pages.AboutMe as AboutMe
 import Request
@@ -79,36 +80,59 @@ subscriptions model =
 
 view : Model -> View Msg
 view model =
-    { title = "_about-me - " ++ model.params.file
+    let
+        aboutMeView =
+            AboutMe.view model.aboutMeModel
+                |> View.map AboutMeMsg
+
+        aboutMeAttrs =
+            AboutMe.viewAttrs model.aboutMeModel
+                |> List.map (Attributes.map AboutMeMsg)
+
+        aboutMeContent =
+            AboutMe.viewSidebar model.aboutMeModel
+                |> Html.map AboutMeMsg
+    in
+    { title =
+        viewTitle
+            ( aboutMeView.title, model.params.file )
     , body =
         Layout.viewLayout
             { initLayout
-                | route = Route.AboutMe__File_ { file = model.params.file }
-                , mainAttrs =
-                    AboutMe.mainAttrs model.aboutMeModel
-                        |> List.map (Attributes.map AboutMeMsg)
-                , mainContent =
-                    viewAboutMePage model
-                        ++ viewPage model
+                | route = Route.AboutMe
+                , mainAttrs = aboutMeAttrs
+                , mainContent = aboutMeContent :: viewPage model
             }
     }
 
 
-viewAboutMePage : Model -> List (Html Msg)
-viewAboutMePage model =
-    AboutMe.viewPage model.aboutMeModel
-        |> List.map (Html.map AboutMeMsg)
+viewTitle : ( String, String ) -> String
+viewTitle ( base, file ) =
+    String.join " - " [ base, file ]
 
 
 viewPage : Model -> List (Html Msg)
 viewPage model =
-    [ case model.params.file of
+    case model.params.file of
         "README.md" ->
-            p [] [ text "README.md" ]
+            [ p [] [ text "README.md" ]
+            , div [ class "bg-secondary-2 p-5 " ] []
+            ]
 
         "university" ->
-            p [] [ text "university" ]
+            [ p [] [ text "university" ]
+            , div [ class "bg-secondary-1 p-5 " ] []
+            ]
+
+        "github" ->
+            [ p [] [ text "github" ]
+            , div [ class "bg-accent-1 p-5 " ] []
+            ]
+
+        "gitlab" ->
+            [ p [] [ text "gitlab" ]
+            , div [ class "bg-accent-3 p-5 " ] []
+            ]
 
         _ ->
-            text ""
-    ]
+            []
