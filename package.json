@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.0",
-    "@tailwindcss/line-clamp": "^0.4.0"
+    "@tailwindcss/line-clamp": "^0.4.0",
+    "vite-plugin-rewrite-all": "^0.1.2"
   }
 }

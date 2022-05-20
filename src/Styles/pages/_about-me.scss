@@ -73,9 +73,11 @@
 		}
 
 		.file {
-			display: flex;
-			align-items: center;
-			gap: $line-gap;
+			&__link {
+				display: flex;
+				align-items: center;
+				gap: $line-gap;
+			}
 		}
 	}
 }
