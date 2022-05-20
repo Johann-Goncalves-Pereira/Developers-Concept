@@ -10,10 +10,12 @@ import Html.Attributes exposing (class, href, id)
 import Html.Attributes.Aria exposing (ariaLabelledby)
 import Page
 import Platform exposing (Task)
+import Process
 import Request
 import Round
 import Shared
 import Task
+import Time
 import Utils.View exposing (customProp)
 import View exposing (View)
 
@@ -34,20 +36,12 @@ page _ req =
 
 type alias Model =
     { headerUsernameWidth : Float
-    , explorer : List Explorer
-    }
-
-
-type alias Explorer =
-    { files : ( Bool, Html Msg )
-    , folders : ( Bool, List (Html Msg) )
     }
 
 
 init : ( Model, Cmd Msg )
 init =
     ( { headerUsernameWidth = 304
-      , explorer = []
       }
     , BrowserDom.getElement headerUsernameId
         |> Task.attempt GetHeaderUsernameWidth
@@ -60,6 +54,7 @@ init =
 
 type Msg
     = GetHeaderUsernameWidth (Result Error Element)
+    | TryGetHeaderAgain
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -73,14 +68,24 @@ update msg model =
                 Ok size ->
                     ( { model | headerUsernameWidth = size.element.width }, Cmd.none )
 
+        TryGetHeaderAgain ->
+            ( model
+            , BrowserDom.getElement headerUsernameId
+                |> Task.attempt GetHeaderUsernameWidth
+            )
+
 
 
 -- SUBSCRIPTIONS
 
 
 subs : Model -> Sub Msg
-subs _ =
-    Sub.none
+subs model =
+    if model.headerUsernameWidth < 200 then
+        Time.every (60 + 10) (\_ -> TryGetHeaderAgain)
+
+    else
+        Sub.none
 
 
 
