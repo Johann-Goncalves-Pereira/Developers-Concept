@@ -10,6 +10,8 @@ import Page
 import Pages.AboutMe as AboutMe
 import Request
 import Shared
+import SyntaxHighlight exposing (css)
+import Utils.Highlight exposing (codeFormatter, codeHighlight)
 import View exposing (View)
 
 
@@ -115,7 +117,7 @@ viewPage : Model -> List (Html Msg)
 viewPage model =
     case model.params.file of
         "README.md" ->
-            [ p [] [ text "README.md" ]
+            [ p [] [ text "README" ]
             , div [ class "bg-secondary-2 p-5 " ] []
             ]
 
@@ -134,5 +136,34 @@ viewPage model =
             , div [ class "bg-accent-3 p-5 " ] []
             ]
 
+        "kelpie" ->
+            [ viewKelpieOne
+            , div [ class "bg-accent-3 p-5 " ] []
+            ]
+
+        "materialize" ->
+            [ p [] [ text "materialize" ]
+            , div [ class "bg-accent-1 p-5 " ] []
+            ]
+
         _ ->
             []
+
+
+viewKelpieOne : Html Msg
+viewKelpieOne =
+    div [ class "code-count" ]
+        [ codeFormatter kelpieDescription
+            |> codeHighlight css
+        ]
+
+
+kelpieDescription : List String
+kelpieDescription =
+    [ "/*"
+    , "testing if is working"
+    , "maybe it isent but it is working lçkj"
+    , "*/"
+    , "      asdkljflajs"
+    , ".test {}"
+    ]

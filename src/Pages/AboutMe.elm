@@ -41,6 +41,7 @@ type alias Model =
     , currentFile : String
     , showExplorer : Bool
     , folder : Folders
+    , files : List String
     }
 
 
@@ -56,6 +57,7 @@ init =
       , currentFile = ""
       , showExplorer = True
       , folder = { bio = True, project = True }
+      , files = filesList
       }
     , Cmd.batch
         [ BrowserDom.getElement headerUsernameId
@@ -226,12 +228,22 @@ viewSidebarExplorer model =
                       , files = [ "kelpie", "materialize" ]
                       }
                     ]
-                    ++ [ viewListFiles model "README.md"
-                       ]
+                    ++ [ viewListFiles model "README" ]
 
           else
             text ""
         ]
+
+
+filesList : List String
+filesList =
+    [ "README.md"
+    , "university.md"
+    , "github.md"
+    , "gitlab.md"
+    , "kelpie.md"
+    , "materialize.md"
+    ]
 
 
 viewDirectory : String -> Msg -> Bool -> List (Html Msg) -> Html Msg

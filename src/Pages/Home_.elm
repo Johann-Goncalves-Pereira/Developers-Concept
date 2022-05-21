@@ -10,7 +10,7 @@ import Page
 import Request
 import Shared
 import SyntaxHighlight exposing (elm)
-import Utils.Highlight exposing (codeHighlight)
+import Utils.Highlight exposing (codeFormatter, codeHighlight)
 import View exposing (View)
 
 
@@ -88,20 +88,21 @@ viewPresentation model =
             , href "https://github.com/Johann-Goncalves-Pereira/Developers-Concept"
             , target "_blank"
             ]
-            [ codeHighlight elm viewCode ]
+            [ codeFormatter viewCode
+                |> codeHighlight elm
+            ]
         ]
 
 
-viewCode : String
+viewCode : List String
 viewCode =
-    String.join "\n"
-        [ "-- complete the game to continue"
-        , "-- you can also see it on my Github page"
-        , "repository : Attribute msg"
-        , "repository = "
-        , "   a [ href \"https://github.com/example/url\" ]"
-        , "     [ text \"Game\" ]  "
-        ]
+    [ "-- complete the game to continue"
+    , "-- you can also see it on my Github page"
+    , "repository : Attribute msg"
+    , "repository = "
+    , "   a [ href \"https://github.com/example/url\" ]"
+    , "     [ text \"Game\" ]  "
+    ]
 
 
 viewGame : Model -> Html Msg
