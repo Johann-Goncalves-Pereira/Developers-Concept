@@ -23,7 +23,7 @@
             "ryannhg/elm-spa": "6.0.0"
         },
         "indirect": {
-            "elm/virtual-dom": "1.0.2"
+            "elm/virtual-dom": "1.0.3"
         }
     },
     "test-dependencies": {
