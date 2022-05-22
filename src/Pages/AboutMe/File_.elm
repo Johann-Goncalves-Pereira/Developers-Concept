@@ -114,7 +114,7 @@ viewTitle ( base, file ) =
 viewPage : Model -> List (Html Msg)
 viewPage model =
     case model.params.file of
-        "README.md" ->
+        "README" ->
             [ placeholderOne
             , div [ class "bg-secondary-2 p-5 " ] []
             ]

@@ -24,7 +24,7 @@ body {
 	grid-template-rows: auto 1fr auto;
 
 	width: Max(100vw - 1rem, 100vw - 2vw);
-	height: Max(100vw - 1rem, 100vw - 2vh);
+	height: Max(100vh - 1rem, 100vh - 2vh);
 	overflow: hidden;
 
 	border-radius: var(--radius-local-4);

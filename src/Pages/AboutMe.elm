@@ -88,6 +88,9 @@ initFolders : Folders
 initFolders =
     { bio = True, project = True }
 
+type AboutMeRoutes =
+    Kelpie
+
 
 initElements : RootElements
 initElements =
@@ -237,7 +240,9 @@ viewAttrs : Model -> List (Attribute Msg)
 viewAttrs model =
     let
         calcMaxHeight =
-            model.rootElements.root - model.rootElements.rootHeader - model.rootElements.rootFooter
+            model.rootElements.root
+                - model.rootElements.rootHeader
+                - model.rootElements.rootFooter
     in
     [ customProp
         ( "header-username"
@@ -247,9 +252,9 @@ viewAttrs model =
         )
     , attribute "style" <|
         String.concat
-            [ "height: Min(100vh - 2rem,"
+            [ "max-height:"
             , String.fromFloat calcMaxHeight
-            , "px);"
+            , "px;"
             ]
     ]
 
