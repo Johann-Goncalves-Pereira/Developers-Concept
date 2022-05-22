@@ -23,8 +23,8 @@ body {
 	display: grid;
 	grid-template-rows: auto 1fr auto;
 
-	width: calc(100vw - Max(0.5rem, 1vw));
-	height: calc(100vh - Max(0.75rem, 1vh));
+	width: Max(100vw - 1rem, 100vw - 2vw);
+	height: Max(100vw - 1rem, 100vw - 2vh);
 	overflow: hidden;
 
 	border-radius: var(--radius-local-4);

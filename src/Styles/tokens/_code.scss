@@ -1,3 +1,5 @@
+@use "sass:string" as *;
+
 .elmsh-hl {
 	background: #343434;
 }
@@ -89,7 +91,7 @@
 	.elmsh-line {
 		display: flex;
 		gap: 1rem;
-		white-space: normal;
+		white-space: pre-wrap;
 
 		&::before {
 			color: var(--clr-secondary-0);
@@ -99,6 +101,9 @@
 	@for $i from 0 through 100 {
 		.elmsh-line[data-elmsh-lc="#{$i}"]::before {
 			content: "#{$i}";
+			@if $i <= 9 {
+				padding-left: 1ch;
+			}
 		}
 	}
 }
