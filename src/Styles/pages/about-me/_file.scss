@@ -1,0 +1,10 @@
+.main--about-me {
+	.file {
+		&--description {
+			padding: 1rem;
+			border-right: var(--border-base);
+
+			max-height: 100%;
+		}
+	}
+}

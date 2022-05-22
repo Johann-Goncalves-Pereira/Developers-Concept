@@ -1,6 +1,6 @@
 module Pages.AboutMe.File_ exposing (Model, Msg, page)
 
-import Components.Layout as Layout exposing (initLayout)
+import Components.Layout as Layout exposing (footerId, headerId, initLayout)
 import Components.Svg exposing (github)
 import Gen.Params.AboutMe.File_ exposing (Params)
 import Gen.Route as Route exposing (Route)
@@ -10,8 +10,6 @@ import Page
 import Pages.AboutMe as AboutMe
 import Request
 import Shared
-import SyntaxHighlight exposing (css)
-import Utils.Highlight exposing (codeFormatter, codeHighlight)
 import View exposing (View)
 
 
@@ -117,53 +115,54 @@ viewPage : Model -> List (Html Msg)
 viewPage model =
     case model.params.file of
         "README.md" ->
-            [ p [] [ text "README" ]
+            [ placeholderOne
             , div [ class "bg-secondary-2 p-5 " ] []
             ]
 
         "university" ->
-            [ p [] [ text "university" ]
+            [ placeholderOne
             , div [ class "bg-secondary-1 p-5 " ] []
             ]
 
         "github" ->
-            [ p [] [ text "github" ]
+            [ placeholderOne
             , div [ class "bg-accent-1 p-5 " ] []
             ]
 
         "gitlab" ->
-            [ p [] [ text "gitlab" ]
+            [ placeholderOne
             , div [ class "bg-accent-3 p-5 " ] []
             ]
 
         "kelpie" ->
-            [ viewKelpieOne
-            , div [ class "bg-accent-3 p-5 " ] []
+            [ placeholderOne
+            , div [] []
             ]
 
         "materialize" ->
-            [ p [] [ text "materialize" ]
-            , div [ class "bg-accent-1 p-5 " ] []
+            [ placeholderOne
+            , div [] []
             ]
 
         _ ->
             []
 
 
-viewKelpieOne : Html Msg
-viewKelpieOne =
-    div [ class "code-count" ]
-        [ codeFormatter kelpieDescription
-            |> codeHighlight css
-        ]
+placeholderOne : Html Msg
+placeholderOne =
+    div [ class "file--description scroll-custom" ]
+        [ p [] [ text strss ] ]
 
 
-kelpieDescription : List String
-kelpieDescription =
-    [ "/*"
-    , "testing if is working"
-    , "maybe it isent but it is working lçkj"
-    , "*/"
-    , "      asdkljflajs"
-    , ".test {}"
-    ]
+strss : String
+strss =
+    String.repeat 10 """
+        This tutorial shows you how to add space in HTML.
+        Any blank spaces you type in HTML text to show in a browser, 
+        beyond a single space between words, are ignored.
+        Therefore, you must code your desired blank spaces into your document.
+        You can add space in HTML to any lines of text. You can use the &nbsp; 
+        HTML entity to create blank spaces in both paragraph text 
+        and text in tables, for example.
+        Since there is no blank space keyboard character in HTML, 
+        you must type the entity &nbsp; for each space to add."""

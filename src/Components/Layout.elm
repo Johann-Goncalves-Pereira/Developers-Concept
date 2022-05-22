@@ -1,4 +1,12 @@
-module Components.Layout exposing (Model, headerUsernameId, initLayout, viewLayout)
+module Components.Layout exposing
+    ( Model
+    , footerId
+    , headerId
+    , headerUsernameId
+    , initLayout
+    , rootId
+    , viewLayout
+    )
 
 import Components.Svg as SVG
 import Gen.Route as Route exposing (Route)
@@ -111,6 +119,11 @@ classBuilder string =
 -- View
 
 
+rootId : String
+rootId =
+    "root"
+
+
 viewLayout : Model msg -> List (Html msg)
 viewLayout model =
     let
@@ -119,7 +132,7 @@ viewLayout model =
             class <| "root__main main--" ++ classBuilder (caseNamePage model.route)
     in
     [ div
-        [ id "root"
+        [ id rootId
         , classList
             [ ( "root", True )
             , ( "root--" ++ classBuilder (caseNamePage model.route), True )
@@ -137,6 +150,11 @@ classTail list =
     class <| String.join " " list
 
 
+headerId : String
+headerId =
+    "root__header"
+
+
 headerUsernameId : String
 headerUsernameId =
     "header-username"
@@ -144,7 +162,7 @@ headerUsernameId =
 
 viewHeader : Model msg -> Html msg
 viewHeader model =
-    header [ class "root__header" ]
+    header [ class "root__header", id headerId ]
         [ h1
             [ classTail
                 [ "py-4"
@@ -197,9 +215,14 @@ viewLink model =
         ]
 
 
+footerId : String
+footerId =
+    "root__footer"
+
+
 viewFooter : Html msg
 viewFooter =
-    div [ class "root__footer" ]
+    div [ class "root__footer", id footerId ]
         [ small
             [ classTail
                 [ "py-4"

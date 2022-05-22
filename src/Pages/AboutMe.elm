@@ -1,12 +1,12 @@
 module Pages.AboutMe exposing (Model, Msg, init, page, update, view, viewAttrs, viewSidebar)
 
 import Browser.Dom as BrowserDom exposing (Element, Error)
-import Components.Layout as Layout exposing (headerUsernameId, initLayout)
+import Components.Layout as Layout exposing (footerId, headerId, headerUsernameId, initLayout, rootId)
 import Components.Svg as SVG
 import Gen.Params.AboutMe exposing (Params)
 import Gen.Route as Route exposing (Route)
 import Html exposing (Attribute, Html, a, button, div, h4, header, li, section, span, text, ul)
-import Html.Attributes exposing (class, classList, href, id)
+import Html.Attributes exposing (attribute, class, classList, href, id)
 import Html.Attributes.Aria exposing (ariaLabelledby)
 import Html.Events exposing (onClick)
 import Page
@@ -42,6 +42,7 @@ type alias Model =
     , showExplorer : Bool
     , folder : Folders
     , files : List String
+    , rootElements : RootElements
     }
 
 
@@ -51,19 +52,55 @@ type alias Folders =
     }
 
 
+type alias RootElements =
+    { root : Float
+    , rootHeader : Float
+    , rootFooter : Float
+    }
+
+
+type RootPart
+    = Root
+    | RootHeader
+    | RootFooter
+
+
 init : ( Model, Cmd Msg )
 init =
     ( { headerUsernameWidth = 304
       , currentFile = ""
       , showExplorer = True
-      , folder = { bio = True, project = True }
+      , folder = initFolders
       , files = filesList
+      , rootElements = initElements
       }
     , Cmd.batch
         [ BrowserDom.getElement headerUsernameId
             |> Task.attempt GetHeaderUsernameWidth
+        , getElements Root rootId
+        , getElements RootHeader headerId
+        , getElements RootFooter footerId
         ]
     )
+
+
+initFolders : Folders
+initFolders =
+    { bio = True, project = True }
+
+
+initElements : RootElements
+initElements =
+    { root = 0
+    , rootHeader = 0
+    , rootFooter = 0
+    }
+
+
+getElements : RootPart -> String -> Cmd Msg
+getElements rootParts elementId =
+    BrowserDom.getElement elementId
+        |> Task.attempt (GotBaseElementsSize rootParts)
 
 
 
@@ -72,6 +109,7 @@ init =
 
 type Msg
     = GetHeaderUsernameWidth (Result Error Element)
+    | GotBaseElementsSize RootPart (Result Error Element)
     | TryGetHeaderAgain
     | ChangeCurrentFile String
     | ToggleExplorer Bool
@@ -93,6 +131,48 @@ update msg model =
 
                 Ok size ->
                     ( { model | headerUsernameWidth = size.element.width }
+                    , Cmd.none
+                    )
+
+        GotBaseElementsSize part result ->
+            let
+                re =
+                    model.rootElements
+            in
+            case ( part, result ) of
+                ( _, Err _ ) ->
+                    ( model, Cmd.none )
+
+                ( Root, Ok size_ ) ->
+                    ( { model
+                        | rootElements =
+                            { re
+                                | root =
+                                    size_.element.height
+                            }
+                      }
+                    , Cmd.none
+                    )
+
+                ( RootHeader, Ok size_ ) ->
+                    ( { model
+                        | rootElements =
+                            { re
+                                | rootHeader =
+                                    size_.element.height
+                            }
+                      }
+                    , Cmd.none
+                    )
+
+                ( RootFooter, Ok size_ ) ->
+                    ( { model
+                        | rootElements =
+                            { re
+                                | rootFooter =
+                                    size_.element.height
+                            }
+                      }
                     , Cmd.none
                     )
 
@@ -155,12 +235,22 @@ viewPage model =
 
 viewAttrs : Model -> List (Attribute Msg)
 viewAttrs model =
+    let
+        calcMaxHeight =
+            model.rootElements.root - model.rootElements.rootHeader - model.rootElements.rootFooter
+    in
     [ customProp
         ( "header-username"
         , String.fromFloat
             (model.headerUsernameWidth + 1)
             ++ "px"
         )
+    , attribute "style" <|
+        String.concat
+            [ "height: Min(100vh - 2rem,"
+            , String.fromFloat calcMaxHeight
+            , "px);"
+            ]
     ]
 
 
