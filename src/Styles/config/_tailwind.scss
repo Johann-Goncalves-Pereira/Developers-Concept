@@ -12,6 +12,7 @@
 	.scroll-custom {
 		overflow: auto;
 		overflow: overlay;
+		padding-right: 16px;
 
 		scrollbar-color: var(--clr-secondary-0);
 
@@ -21,6 +22,7 @@
 
 			border-left: var(--border-base);
 			background-clip: padding-box;
+			background-color: var(--clr-primary-1);
 
 			&-thumb {
 				$border-width: 4px;
