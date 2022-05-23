@@ -1,15 +1,17 @@
-module Pages.AboutMe.Kelpie exposing (Model, Msg, page)
+module Pages.AboutMe.ReadMe exposing (Model, Msg, page)
 
+import Browser.Dom as BrowserDom exposing (Element, Error)
 import Components.Layout as Layout exposing (initLayout)
-import Gen.Params.AboutMe.Kelpie exposing (Params)
+import Gen.Params.AboutMe.ReadMe exposing (Params)
 import Gen.Route as Route exposing (Route)
-import Html exposing (Html, div)
-import Html.Attributes as Attributes exposing (class)
+import Html exposing (Html, div, p, text)
+import Html.Attributes as Attributes exposing (class, id)
 import List exposing (singleton)
 import Page
 import Pages.AboutMe as AboutMe
 import Request
 import Shared
+import Task
 import View exposing (View)
 
 
@@ -30,6 +32,9 @@ page _ req =
 type alias Model =
     { -- Models
       aboutMeModel : AboutMe.Model
+
+    -- Size
+    , description : Float
     }
 
 
@@ -41,8 +46,13 @@ init route =
     in
     ( { -- Init
         aboutMeModel = aboutMeModel_
+      , description = 0
       }
-    , Cmd.map AboutMeMsg aboutMeCmd_
+    , Cmd.batch
+        [ Cmd.map AboutMeMsg aboutMeCmd_
+        , BrowserDom.getElement descriptionId
+            |> Task.attempt GetDescription
+        ]
     )
 
 
@@ -51,7 +61,10 @@ init route =
 
 
 type Msg
-    = AboutMeMsg AboutMe.Msg
+    = -- Other Msg
+      AboutMeMsg AboutMe.Msg
+      -- Elements
+    | GetDescription (Result Error Element)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -65,6 +78,18 @@ update msg model =
             ( { model | aboutMeModel = aboutMeModel_ }
             , Cmd.map AboutMeMsg aboutMeCmd_
             )
+
+        GetDescription callback ->
+            case callback of
+                Err _ ->
+                    ( model, Cmd.none )
+
+                Ok side_ ->
+                    ( { model
+                        | description = side_.element.height
+                      }
+                    , Cmd.none
+                    )
 
 
 
@@ -108,8 +133,32 @@ view model =
     }
 
 
+descriptionId : String
+descriptionId =
+    "description-id"
+
+
 viewPage : Model -> List (Html Msg)
 viewPage model =
-    [ div [ class "description" ] []
+    [ div [ class "description scroll-custom" ]
+        [ div []
+            [-- List of numbers based on the height of the description
+             -- List.map2 (\item height )
+            ]
+        , p [ class "", id descriptionId ] [ text strss ]
+        ]
     ]
 
+
+strss : String
+strss =
+    String.repeat 10 """
+        This tutorial shows you how to add space in HTML.
+        Any blank spaces you type in HTML text to show in a browser, 
+        beyond a single space between words, are ignored.
+        Therefore, you must code your desired blank spaces into your document.
+        You can add space in HTML to any lines of text. You can use the &nbsp; 
+        HTML entity to create blank spaces in both paragraph text 
+        and text in tables, for example.
+        Since there is no blank space keyboard character in HTML, 
+        you must type the entity &nbsp; for each space to add."""
