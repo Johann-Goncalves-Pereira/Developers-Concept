@@ -9,8 +9,8 @@ import Html exposing (Attribute, Html, a, button, div, h4, header, li, p, sectio
 import Html.Attributes exposing (attribute, class, classList, href, id)
 import Html.Attributes.Aria exposing (ariaLabelledby)
 import Html.Events exposing (onClick)
+import List exposing (singleton)
 import Page
-import Pages.AboutMe.Kelpie as Kelpie
 import Platform exposing (Task)
 import Process
 import Request
@@ -61,6 +61,7 @@ type alias RootElements =
     , rootHeader : Float
     , rootFooter : Float
     , headerUsername : Float
+    , fallBackError : Error
     }
 
 
@@ -91,6 +92,7 @@ initElements =
     , rootHeader = 0
     , rootFooter = 0
     , headerUsername = 0
+    , fallBackError = BrowserDom.NotFound "Error"
     }
 
 
@@ -140,8 +142,15 @@ update msg model =
                     model.rootElements
             in
             case ( part, result ) of
-                ( _, Err _ ) ->
-                    ( model, Cmd.none )
+                ( _, Err error ) ->
+                    ( { model
+                        | rootElements =
+                            { rootElements_
+                                | fallBackError = error
+                            }
+                      }
+                    , Cmd.none
+                    )
 
                 ( Root, Ok size_ ) ->
                     ( { model
@@ -149,6 +158,8 @@ update msg model =
                             { rootElements_
                                 | root =
                                     size_.element.height
+                                , fallBackError =
+                                    BrowserDom.NotFound "Ok"
                             }
                       }
                     , Cmd.none
@@ -160,6 +171,8 @@ update msg model =
                             { rootElements_
                                 | rootHeader =
                                     size_.element.height
+                                , fallBackError =
+                                    BrowserDom.NotFound "Ok"
                             }
                       }
                     , Cmd.none
@@ -171,6 +184,8 @@ update msg model =
                             { rootElements_
                                 | rootFooter =
                                     size_.element.height
+                                , fallBackError =
+                                    BrowserDom.NotFound "Ok"
                             }
                       }
                     , Cmd.none
@@ -182,6 +197,8 @@ update msg model =
                             { rootElements_
                                 | headerUsername =
                                     size_.element.height
+                                , fallBackError =
+                                    BrowserDom.NotFound "Ok"
                             }
                       }
                     , Cmd.none
@@ -220,8 +237,11 @@ update msg model =
 
 subs : Model -> Sub Msg
 subs model =
-    if model.rootElements.headerUsername > 200 then
-        Time.every (60 + 10) (\_ -> TryGetElementsAgain)
+    if
+        model.rootElements.fallBackError
+            == BrowserDom.NotFound "Error"
+    then
+        Time.every (60 * 10) (\_ -> TryGetElementsAgain)
 
     else
         Sub.none
@@ -245,32 +265,25 @@ viewPage model =
             | route = Route.AboutMe
             , mainAttrs = viewAttrs model
             , mainContent =
-                viewSidebar model
-                    :: (case model.route of
-                            Route.AboutMe__Kelpie ->
-                                Kelpie.view.body
-
-                            Route.AboutMe ->
-                                []
-
-                            _ ->
-                                []
-                       )
+                singleton <| viewSidebar model
         }
 
 
 viewAttrs : Model -> List (Attribute Msg)
 viewAttrs model =
     let
+        elements =
+            model.rootElements
+
         calcMaxHeight =
-            model.rootElements.root
-                - model.rootElements.rootHeader
-                - model.rootElements.rootFooter
+            elements.root
+                - elements.rootHeader
+                - elements.rootFooter
     in
     [ customProp
         ( "header-username"
         , String.fromFloat
-            (model.rootElements.headerUsername + 1)
+            (elements.headerUsername + 1)
             ++ "px"
         )
     , attribute "style" <|
@@ -315,7 +328,9 @@ viewSidebarExplorer model =
             [ button
                 [ classList
                     [ ( "header__button", True )
-                    , ( "header__button--active", not model.showExplorer )
+                    , ( "header__button--active"
+                      , not model.showExplorer
+                      )
                     ]
                 , ToggleExplorer model.showExplorer
                     |> onClick
@@ -348,22 +363,11 @@ viewSidebarExplorer model =
                       , files = [ Route.AboutMe__Kelpie ]
                       }
                     ]
-            -- ++ [ viewListFiles model "README" ]
+                    ++ [ viewListFiles model Route.AboutMe__ReadMe ]
 
           else
             text ""
         ]
-
-
-filesList : List String
-filesList =
-    [ "README.md"
-    , "university.md"
-    , "github.md"
-    , "gitlab.md"
-    , "kelpie.md"
-    , "materialize.md"
-    ]
 
 
 viewDirectory : String -> Msg -> Bool -> List (Html Msg) -> Html Msg
@@ -399,8 +403,7 @@ viewListFiles model filename =
             [ classList
                 [ ( "file__link", True )
                 , ( "file__link--active"
-                  , False
-                    --   , filename == model.currentFile
+                  , filename == model.route
                   )
                 ]
             , href <| Route.toHref filename
@@ -413,23 +416,3 @@ viewListFiles model filename =
                 |> text
             ]
         ]
-
-
-placeholderOne : Html Msg
-placeholderOne =
-    div [ class "file--description scroll-custom" ]
-        [ p [] [ text strss ] ]
-
-
-strss : String
-strss =
-    String.repeat 10 """
-        This tutorial shows you how to add space in HTML.
-        Any blank spaces you type in HTML text to show in a browser, 
-        beyond a single space between words, are ignored.
-        Therefore, you must code your desired blank spaces into your document.
-        You can add space in HTML to any lines of text. You can use the &nbsp; 
-        HTML entity to create blank spaces in both paragraph text 
-        and text in tables, for example.
-        Since there is no blank space keyboard character in HTML, 
-        you must type the entity &nbsp; for each space to add."""

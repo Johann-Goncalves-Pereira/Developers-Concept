@@ -83,7 +83,7 @@ caseNamePage route =
         "_hello"
 
     else
-        "_" ++ String.replace "/" " - " (String.dropLeft 1 <| Route.toHref route)
+        "_" ++ String.replace "/" " " (String.dropLeft 1 <| Route.toHref route)
 
 
 userReplace : String -> (Regex.Match -> String) -> String -> String
@@ -189,9 +189,9 @@ viewLink : Link -> Html msg
 viewLink model =
     li [ class "list__item" ]
         [ a
-            [ class "list__links "
-            , classList
-                [ ( "list__links--current-page"
+            [ classList
+                [ ( "list__links", True )
+                , ( "list__links--current-page"
                   , isRoute model.routeReceived model.routeStatic
                   )
                 ]

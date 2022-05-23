@@ -3,8 +3,8 @@ module Pages.AboutMe.Kelpie exposing (Model, Msg, page)
 import Components.Layout as Layout exposing (initLayout)
 import Gen.Params.AboutMe.Kelpie exposing (Params)
 import Gen.Route as Route exposing (Route)
-import Html exposing (Html, div)
-import Html.Attributes as Attributes exposing (class)
+import Html exposing (Html)
+import Html.Attributes as Attributes
 import List exposing (singleton)
 import Page
 import Pages.AboutMe as AboutMe
@@ -101,15 +101,6 @@ view model =
             { initLayout
                 | route = Route.AboutMe__Kelpie
                 , mainAttrs = aboutMeAttrs
-                , mainContent =
-                    aboutMeSideBar
-                        :: viewPage model
+                , mainContent = singleton aboutMeSideBar
             }
     }
-
-
-viewPage : Model -> List (Html Msg)
-viewPage model =
-    [ div [ class "description" ] []
-    ]
-
