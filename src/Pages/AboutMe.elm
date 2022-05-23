@@ -5,11 +5,12 @@ import Components.Layout as Layout exposing (footerId, headerId, headerUsernameI
 import Components.Svg as SVG
 import Gen.Params.AboutMe exposing (Params)
 import Gen.Route as Route exposing (Route)
-import Html exposing (Attribute, Html, a, button, div, h4, header, li, section, span, text, ul)
+import Html exposing (Attribute, Html, a, button, div, h4, header, li, p, section, span, text, ul)
 import Html.Attributes exposing (attribute, class, classList, href, id)
 import Html.Attributes.Aria exposing (ariaLabelledby)
 import Html.Events exposing (onClick)
 import Page
+import Pages.AboutMe.Kelpie as Kelpie
 import Platform exposing (Task)
 import Process
 import Request
@@ -25,7 +26,7 @@ import View exposing (View)
 page : Shared.Model -> Request.With Params -> Page.With Model Msg
 page _ req =
     Page.element
-        { init = init
+        { init = init req.route
         , update = update
         , view = view
         , subscriptions = subs
@@ -37,12 +38,15 @@ page _ req =
 
 
 type alias Model =
-    { headerUsernameWidth : Float
-    , currentFile : String
+    { -- Elements Size
+      rootElements : RootElements
+
+    -- Explorer toggles
     , showExplorer : Bool
-    , folder : Folders
-    , files : List String
-    , rootElements : RootElements
+    , showFolder : Folders
+
+    -- Other Pages
+    , route : Route
     }
 
 
@@ -56,30 +60,22 @@ type alias RootElements =
     { root : Float
     , rootHeader : Float
     , rootFooter : Float
+    , headerUsername : Float
     }
 
 
-type RootPart
-    = Root
-    | RootHeader
-    | RootFooter
-
-
-init : ( Model, Cmd Msg )
-init =
-    ( { headerUsernameWidth = 304
-      , currentFile = ""
-      , showExplorer = True
-      , folder = initFolders
-      , files = filesList
+init : Route -> ( Model, Cmd Msg )
+init route_ =
+    ( { showExplorer = True
+      , showFolder = initFolders
       , rootElements = initElements
+      , route = route_
       }
     , Cmd.batch
-        [ BrowserDom.getElement headerUsernameId
-            |> Task.attempt GetHeaderUsernameWidth
-        , getElements Root rootId
+        [ getElements Root rootId
         , getElements RootHeader headerId
         , getElements RootFooter footerId
+        , getElements RootHeaderUsername headerUsernameId
         ]
     )
 
@@ -88,15 +84,13 @@ initFolders : Folders
 initFolders =
     { bio = True, project = True }
 
-type AboutMeRoutes =
-    Kelpie
-
 
 initElements : RootElements
 initElements =
     { root = 0
     , rootHeader = 0
     , rootFooter = 0
+    , headerUsername = 0
     }
 
 
@@ -107,39 +101,42 @@ getElements rootParts elementId =
 
 
 
+-- TYPES
+
+
+type RootPart
+    = Root
+    | RootFooter
+    | RootHeader
+    | RootHeaderUsername
+
+
+
 -- UPDATE
 
 
 type Msg
-    = GetHeaderUsernameWidth (Result Error Element)
-    | GotBaseElementsSize RootPart (Result Error Element)
-    | TryGetHeaderAgain
-    | ChangeCurrentFile String
+    = -- Get Elements Size
+      GotBaseElementsSize RootPart (Result Error Element)
+    | TryGetElementsAgain
+      -- Toggle Explorer
     | ToggleExplorer Bool
     | ToggleBio Bool
     | ToggleProject Bool
+      -- Other Pages
+    | ChangeUrl Route
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     let
-        f =
-            model.folder
+        showFolder_ =
+            model.showFolder
     in
     case msg of
-        GetHeaderUsernameWidth result ->
-            case result of
-                Err _ ->
-                    ( model, Cmd.none )
-
-                Ok size ->
-                    ( { model | headerUsernameWidth = size.element.width }
-                    , Cmd.none
-                    )
-
         GotBaseElementsSize part result ->
             let
-                re =
+                rootElements_ =
                     model.rootElements
             in
             case ( part, result ) of
@@ -149,7 +146,7 @@ update msg model =
                 ( Root, Ok size_ ) ->
                     ( { model
                         | rootElements =
-                            { re
+                            { rootElements_
                                 | root =
                                     size_.element.height
                             }
@@ -160,7 +157,7 @@ update msg model =
                 ( RootHeader, Ok size_ ) ->
                     ( { model
                         | rootElements =
-                            { re
+                            { rootElements_
                                 | rootHeader =
                                     size_.element.height
                             }
@@ -171,7 +168,7 @@ update msg model =
                 ( RootFooter, Ok size_ ) ->
                     ( { model
                         | rootElements =
-                            { re
+                            { rootElements_
                                 | rootFooter =
                                     size_.element.height
                             }
@@ -179,27 +176,42 @@ update msg model =
                     , Cmd.none
                     )
 
-        TryGetHeaderAgain ->
+                ( RootHeaderUsername, Ok size_ ) ->
+                    ( { model
+                        | rootElements =
+                            { rootElements_
+                                | headerUsername =
+                                    size_.element.height
+                            }
+                      }
+                    , Cmd.none
+                    )
+
+        TryGetElementsAgain ->
             ( model
-            , BrowserDom.getElement headerUsernameId
-                |> Task.attempt GetHeaderUsernameWidth
+            , Cmd.batch
+                [ getElements Root rootId
+                , getElements RootHeader headerId
+                , getElements RootFooter footerId
+                , getElements RootHeaderUsername headerUsernameId
+                ]
             )
 
-        ChangeCurrentFile file_ ->
-            ( { model | currentFile = file_ }, Cmd.none )
-
-        ToggleExplorer showExplorer_ ->
-            ( { model | showExplorer = not showExplorer_ }, Cmd.none )
+        ToggleExplorer toggler_ ->
+            ( { model | showExplorer = not toggler_ }, Cmd.none )
 
         ToggleBio toggler_ ->
-            ( { model | folder = { f | bio = not toggler_ } }
+            ( { model | showFolder = { showFolder_ | bio = not toggler_ } }
             , Cmd.none
             )
 
         ToggleProject toggler_ ->
-            ( { model | folder = { f | project = not toggler_ } }
+            ( { model | showFolder = { showFolder_ | project = not toggler_ } }
             , Cmd.none
             )
+
+        ChangeUrl route_ ->
+            ( { model | route = route_ }, Cmd.none )
 
 
 
@@ -208,8 +220,8 @@ update msg model =
 
 subs : Model -> Sub Msg
 subs model =
-    if model.headerUsernameWidth < 200 then
-        Time.every (60 + 10) (\_ -> TryGetHeaderAgain)
+    if model.rootElements.headerUsername > 200 then
+        Time.every (60 + 10) (\_ -> TryGetElementsAgain)
 
     else
         Sub.none
@@ -232,7 +244,18 @@ viewPage model =
         { initLayout
             | route = Route.AboutMe
             , mainAttrs = viewAttrs model
-            , mainContent = [ viewSidebar model ]
+            , mainContent =
+                viewSidebar model
+                    :: (case model.route of
+                            Route.AboutMe__Kelpie ->
+                                Kelpie.view.body
+
+                            Route.AboutMe ->
+                                []
+
+                            _ ->
+                                []
+                       )
         }
 
 
@@ -247,7 +270,7 @@ viewAttrs model =
     [ customProp
         ( "header-username"
         , String.fromFloat
-            (model.headerUsernameWidth + 1)
+            (model.rootElements.headerUsername + 1)
             ++ "px"
         )
     , attribute "style" <|
@@ -312,18 +335,20 @@ viewSidebarExplorer model =
                                 )
                                 files
                     )
-                    [ { folder = "bio"
-                      , msg = ToggleBio model.folder.bio
-                      , showFile = model.folder.bio
-                      , files = [ "university", "github", "gitlab" ]
-                      }
-                    , { folder = "projects"
-                      , msg = ToggleProject model.folder.project
-                      , showFile = model.folder.project
-                      , files = [ "kelpie", "materialize" ]
+                    [ {- { folder = "bio"
+                           , msg = ToggleBio model.showFolder.bio
+                           , showFile = model.showFolder.bio
+                           , files = [ "university", "github", "gitlab" ]
+                           }
+                         ,
+                      -}
+                      { folder = "projects"
+                      , msg = ToggleProject model.showFolder.project
+                      , showFile = model.showFolder.project
+                      , files = [ Route.AboutMe__Kelpie ]
                       }
                     ]
-                    ++ [ viewListFiles model "README" ]
+            -- ++ [ viewListFiles model "README" ]
 
           else
             text ""
@@ -363,21 +388,48 @@ viewDirectory folderName msg showFiles files =
         ]
 
 
-viewListFiles : Model -> String -> Html Msg
+viewListFiles : Model -> Route -> Html Msg
 viewListFiles model filename =
+    let
+        aboutSize =
+            String.length (Route.toHref Route.AboutMe) + 1
+    in
     li [ class "file" ]
         [ a
             [ classList
                 [ ( "file__link", True )
                 , ( "file__link--active"
-                  , filename == model.currentFile
+                  , False
+                    --   , filename == model.currentFile
                   )
                 ]
-            , Route.AboutMe__File_ { file = filename }
-                |> Route.toHref
-                |> href
-            , ChangeCurrentFile filename
-                |> onClick
+            , href <| Route.toHref filename
+            , onClick <| ChangeUrl filename
             ]
-            [ SVG.markdown, text filename ]
+            [ SVG.markdown
+            , -- |>
+              Route.toHref filename
+                |> String.dropLeft aboutSize
+                |> text
+            ]
         ]
+
+
+placeholderOne : Html Msg
+placeholderOne =
+    div [ class "file--description scroll-custom" ]
+        [ p [] [ text strss ] ]
+
+
+strss : String
+strss =
+    String.repeat 10 """
+        This tutorial shows you how to add space in HTML.
+        Any blank spaces you type in HTML text to show in a browser, 
+        beyond a single space between words, are ignored.
+        Therefore, you must code your desired blank spaces into your document.
+        You can add space in HTML to any lines of text. You can use the &nbsp; 
+        HTML entity to create blank spaces in both paragraph text 
+        and text in tables, for example.
+        Since there is no blank space keyboard character in HTML, 
+        you must type the entity &nbsp; for each space to add."""
