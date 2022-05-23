@@ -64,7 +64,7 @@ isRoute route compare =
         ( Route.AboutMe, Route.AboutMe ) ->
             True
 
-        ( Route.AboutMe, Route.AboutMe__File_ _ ) ->
+        ( Route.AboutMe, Route.AboutMe__Kelpie ) ->
             True
 
         ( Route.Projects, Route.Projects ) ->
@@ -79,24 +79,11 @@ isRoute route compare =
 
 caseNamePage : Route -> String
 caseNamePage route =
-    case route of
-        Route.Home_ ->
-            "_hello"
+    if route == Route.Home_ then
+        "_hello"
 
-        Route.AboutMe ->
-            "_about-me"
-
-        Route.AboutMe__File_ path_ ->
-            "about-me - " ++ path_.file
-
-        Route.Projects ->
-            "_projects"
-
-        Route.ContactMe ->
-            "_contact-me"
-
-        Route.NotFound ->
-            "Not Found"
+    else
+        "_" ++ String.replace "/" " - " (String.dropLeft 1 <| Route.toHref route)
 
 
 userReplace : String -> (Regex.Match -> String) -> String -> String
