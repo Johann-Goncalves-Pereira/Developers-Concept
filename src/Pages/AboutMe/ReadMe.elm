@@ -4,7 +4,7 @@ import Browser.Dom as BrowserDom exposing (Element, Error)
 import Components.Layout as Layout exposing (initLayout)
 import Gen.Params.AboutMe.ReadMe exposing (Params)
 import Gen.Route as Route exposing (Route)
-import Html exposing (Html, div, p, text)
+import Html exposing (Html, div, p, span, text)
 import Html.Attributes as Attributes exposing (class, id)
 import List exposing (singleton)
 import Page
@@ -138,13 +138,20 @@ descriptionId =
     "description-id"
 
 
+numbersMap : (a -> b) -> List a -> List b
+numbersMap f list =
+    case list of
+        [] ->
+            []
+
+        first :: more ->
+            f first :: numbersMap f more
+
+
 viewPage : Model -> List (Html Msg)
 viewPage model =
     [ div [ class "description scroll-custom" ]
-        [ div []
-            [-- List of numbers based on the height of the description
-             -- List.map2 (\item height )
-            ]
+        [ div [] <| []
         , p [ class "", id descriptionId ] [ text strss ]
         ]
     ]
