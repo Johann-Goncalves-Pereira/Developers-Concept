@@ -120,7 +120,7 @@ type RootPart
 type Msg
     = -- Get Elements Size
       GotBaseElementsSize RootPart (Result Error Element)
-    | TryGetElementsAgain
+    | TryGetElementsAgain RootPart
       -- Toggle Explorer
     | ToggleExplorer Bool
     | ToggleBio Bool
@@ -140,13 +140,46 @@ update msg model =
             let
                 rootElements_ =
                     model.rootElements
+
+                bnf =
+                    BrowserDom.NotFound
             in
             case ( part, result ) of
-                ( _, Err error ) ->
+                ( Root, Err _ ) ->
                     ( { model
                         | rootElements =
                             { rootElements_
-                                | fallBackError = error
+                                | fallBackError = bnf "Error Root"
+                            }
+                      }
+                    , Cmd.none
+                    )
+
+                ( RootHeader, Err _ ) ->
+                    ( { model
+                        | rootElements =
+                            { rootElements_
+                                | fallBackError = bnf "Error RootHeader"
+                            }
+                      }
+                    , Cmd.none
+                    )
+
+                ( RootFooter, Err _ ) ->
+                    ( { model
+                        | rootElements =
+                            { rootElements_
+                                | fallBackError = bnf "Error RootFooter"
+                            }
+                      }
+                    , Cmd.none
+                    )
+
+                ( RootHeaderUsername, Err _ ) ->
+                    ( { model
+                        | rootElements =
+                            { rootElements_
+                                | fallBackError = bnf "Error RootHeaderUsername"
                             }
                       }
                     , Cmd.none
@@ -159,7 +192,7 @@ update msg model =
                                 | root =
                                     size_.element.height
                                 , fallBackError =
-                                    BrowserDom.NotFound "Ok"
+                                    bnf "Ok"
                             }
                       }
                     , Cmd.none
@@ -172,7 +205,7 @@ update msg model =
                                 | rootHeader =
                                     size_.element.height
                                 , fallBackError =
-                                    BrowserDom.NotFound "Ok"
+                                    bnf "Ok"
                             }
                       }
                     , Cmd.none
@@ -185,7 +218,7 @@ update msg model =
                                 | rootFooter =
                                     size_.element.height
                                 , fallBackError =
-                                    BrowserDom.NotFound "Ok"
+                                    bnf "Ok"
                             }
                       }
                     , Cmd.none
@@ -198,21 +231,29 @@ update msg model =
                                 | headerUsername =
                                     size_.element.height
                                 , fallBackError =
-                                    BrowserDom.NotFound "Ok"
+                                    bnf "Ok"
                             }
                       }
                     , Cmd.none
                     )
 
-        TryGetElementsAgain ->
-            ( model
-            , Cmd.batch
-                [ getElements Root rootId
-                , getElements RootHeader headerId
-                , getElements RootFooter footerId
-                , getElements RootHeaderUsername headerUsernameId
-                ]
-            )
+        TryGetElementsAgain element_ ->
+            let
+                command e_ id_ =
+                    ( model, getElements e_ id_ )
+            in
+            case element_ of
+                Root ->
+                    command Root rootId
+
+                RootHeader ->
+                    command RootHeader headerId
+
+                RootFooter ->
+                    command RootFooter footerId
+
+                RootHeaderUsername ->
+                    command RootHeaderUsername headerUsernameId
 
         ToggleExplorer toggler_ ->
             ( { model | showExplorer = not toggler_ }, Cmd.none )
@@ -237,11 +278,23 @@ update msg model =
 
 subs : Model -> Sub Msg
 subs model =
-    if
-        model.rootElements.fallBackError
-            == BrowserDom.NotFound "Error"
-    then
-        Time.every (60 * 10) (\_ -> TryGetElementsAgain)
+    let
+        validateElement : String -> Bool
+        validateElement name =
+            model.rootElements.fallBackError
+                == BrowserDom.NotFound ("Error " ++ name)
+    in
+    if validateElement "Root" then
+        Time.every (60 * 10) (\_ -> TryGetElementsAgain Root)
+
+    else if validateElement "RootHeader" then
+        Time.every (60 * 10) (\_ -> TryGetElementsAgain RootHeader)
+
+    else if validateElement "RootFooter" then
+        Time.every (60 * 10) (\_ -> TryGetElementsAgain RootFooter)
+
+    else if validateElement "RootHeaderUsername" then
+        Time.every (60 * 10) (\_ -> TryGetElementsAgain RootHeaderUsername)
 
     else
         Sub.none
@@ -279,6 +332,7 @@ viewAttrs model =
             elements.root
                 - elements.rootHeader
                 - elements.rootFooter
+                - 1
     in
     [ customProp
         ( "header-username"
@@ -289,7 +343,11 @@ viewAttrs model =
     , attribute "style" <|
         String.concat
             [ "max-height:"
-            , String.fromFloat calcMaxHeight
+            , if calcMaxHeight == 0 then
+                "500px"
+
+              else
+                String.fromFloat calcMaxHeight
             , "px;"
             ]
     ]
