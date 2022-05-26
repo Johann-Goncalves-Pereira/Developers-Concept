@@ -107,3 +107,21 @@
 		}
 	}
 }
+
+.code-count-lines {
+	display: grid;
+	grid-auto-rows: min-content;
+	place-items: end;
+
+	// span {
+	// 	position: relative;
+	// 	&::before {
+	// 		content: "";
+	// 		position: absolute;
+	// 		bottom: 0;
+	// 		left: 0;
+	// 		width: 5rem;
+	// 		border-bottom: 1px solid var(--clr-secondary-3);
+	// 	}
+	// }
+}
