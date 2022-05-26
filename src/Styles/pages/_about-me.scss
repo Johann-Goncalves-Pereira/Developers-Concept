@@ -139,5 +139,17 @@
 }
 
 .main--about-me .description {
+	display: grid;
+	grid-template-columns: 2ch 1fr;
+	gap: 1rem;
+	padding: 1rem;
+	padding-right: 2rem;
+
 	border-right: var(--border-base);
+	line-height: 20px;
+	color: var(--clr-secondary-0);
+
+	&__text {
+		height: min-content;
+	}
 }
