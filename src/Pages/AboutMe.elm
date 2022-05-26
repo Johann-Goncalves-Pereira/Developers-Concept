@@ -88,10 +88,10 @@ initFolders =
 
 initElements : RootElements
 initElements =
-    { root = 0
-    , rootHeader = 0
-    , rootFooter = 0
-    , headerUsername = 0
+    { root = -1
+    , rootHeader = -1
+    , rootFooter = -1
+    , headerUsername = -1
     , fallBackError = BrowserDom.NotFound "Error"
     }
 
@@ -285,7 +285,7 @@ subs model =
                 == BrowserDom.NotFound ("Error " ++ name)
 
         tryGetElementAgain e =
-            Time.every (6 * 10 ^ 3) (\_ -> TryGetElementsAgain e)
+            Time.every (6 * 10 ^ 2) (\_ -> TryGetElementsAgain e)
     in
     if validateElement "Root" then
         tryGetElementAgain Root
@@ -332,16 +332,29 @@ viewAttrs model =
             model.rootElements
 
         calcMaxHeight =
-            elements.root
-                - elements.rootHeader
-                - elements.rootFooter
-                - 1
+            if
+                elements.root
+                    <= 0
+                    && elements.rootHeader
+                    <= 0
+                    && elements.rootFooter
+                    <= 0
+                    && elements.headerUsername
+                    <= 0
+            then
+                -1
+
+            else
+                elements.root
+                    - elements.rootHeader
+                    - elements.rootFooter
+                    - 1
 
         getPx v =
             String.fromFloat v ++ "px"
 
         checkCustomProp name value =
-            if value == 0 then
+            if value <= 0 then
                 class ""
 
             else
