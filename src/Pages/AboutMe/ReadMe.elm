@@ -102,6 +102,7 @@ subscriptions model =
 
 
 
+-- Sub.none
 -- VIEW
 
 
@@ -138,34 +139,34 @@ descriptionId =
     "description-id"
 
 
-numbersMap : (a -> b) -> List a -> List b
-numbersMap f list =
-    case list of
-        [] ->
-            []
-
-        first :: more ->
-            f first :: numbersMap f more
-
-
 viewPage : Model -> List (Html Msg)
 viewPage model =
+    let
+        numberOfLines =
+            model.description / 20 - 1 |> round
+    in
     [ div [ class "description scroll-custom" ]
-        [ div [] <| []
-        , p [ class "", id descriptionId ] [ text strss ]
+        [ div [ class "code-count-lines" ] <| linesNumber numberOfLines
+        , p [ class "description__text", id descriptionId ] [ text strss ]
         ]
     ]
 
 
 strss : String
 strss =
-    String.repeat 10 """
+    String.repeat 15 """
         This tutorial shows you how to add space in HTML.
         Any blank spaces you type in HTML text to show in a browser, 
         beyond a single space between words, are ignored.
         Therefore, you must code your desired blank spaces into your document.
-        You can add space in HTML to any lines of text. You can use the &nbsp; 
-        HTML entity to create blank spaces in both paragraph text 
-        and text in tables, for example.
-        Since there is no blank space keyboard character in HTML, 
         you must type the entity &nbsp; for each space to add."""
+
+
+linesNumber : Int -> List (Html Msg)
+linesNumber n =
+    List.range 0 n
+        |> List.map
+            (\x ->
+                span []
+                    [ text <| String.fromInt x ]
+            )
