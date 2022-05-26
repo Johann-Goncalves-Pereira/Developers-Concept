@@ -3,6 +3,8 @@
 
 	display: grid;
 	grid-template-columns: var(--header-username, 19.0625rem) 1fr 1fr;
+
+	height: var(--main-height, calc(100vh - 8.125rem));
 }
 
 .main--about-me .sidebar {

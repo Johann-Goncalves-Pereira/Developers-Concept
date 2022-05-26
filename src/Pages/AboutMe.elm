@@ -19,7 +19,7 @@ import Shared
 import Task
 import Time
 import Utils.Task exposing (run)
-import Utils.View exposing (customProp)
+import Utils.View exposing (customProp, customProps)
 import View exposing (View)
 
 
@@ -283,18 +283,21 @@ subs model =
         validateElement name =
             model.rootElements.fallBackError
                 == BrowserDom.NotFound ("Error " ++ name)
+
+        tryGetElementAgain e =
+            Time.every (6 * 10 ^ 3) (\_ -> TryGetElementsAgain e)
     in
     if validateElement "Root" then
-        Time.every (60 * 10) (\_ -> TryGetElementsAgain Root)
+        tryGetElementAgain Root
 
     else if validateElement "RootHeader" then
-        Time.every (60 * 10) (\_ -> TryGetElementsAgain RootHeader)
+        tryGetElementAgain RootHeader
 
     else if validateElement "RootFooter" then
-        Time.every (60 * 10) (\_ -> TryGetElementsAgain RootFooter)
+        tryGetElementAgain RootFooter
 
     else if validateElement "RootHeaderUsername" then
-        Time.every (60 * 10) (\_ -> TryGetElementsAgain RootHeaderUsername)
+        tryGetElementAgain RootHeaderUsername
 
     else
         Sub.none
@@ -333,23 +336,19 @@ viewAttrs model =
                 - elements.rootHeader
                 - elements.rootFooter
                 - 1
-    in
-    [ customProp
-        ( "header-username"
-        , String.fromFloat
-            (elements.headerUsername + 1)
-            ++ "px"
-        )
-    , attribute "style" <|
-        String.concat
-            [ "max-height:"
-            , if calcMaxHeight == 0 then
-                "500px"
 
-              else
-                String.fromFloat calcMaxHeight
-            , "px;"
-            ]
+        getPx v =
+            String.fromFloat v ++ "px"
+
+        checkCustomProp name value =
+            if value == 0 then
+                class ""
+
+            else
+                customProp ( name, getPx value )
+    in
+    [ checkCustomProp "header-username" <| elements.headerUsername + 1
+    , checkCustomProp "main-height" calcMaxHeight
     ]
 
 
