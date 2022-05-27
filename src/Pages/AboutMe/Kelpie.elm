@@ -92,8 +92,8 @@ view model =
                 |> List.map (Attributes.map AboutMeMsg)
 
         aboutMeSideBar =
-            AboutMe.viewSidebar model.aboutMeModel
-                |> Html.map AboutMeMsg
+            AboutMe.viewPageContent model.aboutMeModel
+                |> List.map (Html.map AboutMeMsg)
     in
     { title = aboutMeView.title ++ " - Kelpie"
     , body =
@@ -103,7 +103,7 @@ view model =
                 , mainAttrs = aboutMeAttrs
                 , mainContent =
                     aboutMeSideBar
-                        :: viewPage model
+                        ++ viewPage model
             }
     }
 
@@ -112,4 +112,3 @@ viewPage : Model -> List (Html Msg)
 viewPage model =
     [ div [ class "description" ] []
     ]
-
