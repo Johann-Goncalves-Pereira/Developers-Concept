@@ -3,6 +3,7 @@
 
 	display: grid;
 	grid-template-columns: var(--header-username, 19.0625rem) 1fr 1fr;
+	grid-template-rows: var(--tabs-height) auto;
 
 	height: var(--main-height, calc(100vh - 8.125rem));
 }
@@ -10,6 +11,8 @@
 .main--about-me .sidebar {
 	display: grid;
 	grid-template-columns: auto 1fr;
+	grid-column-start: 1;
+	grid-row: 1 / span 2;
 	border-right: var(--border-base);
 
 	&__buttons {
@@ -138,9 +141,44 @@
 	}
 }
 
+.main--about-me .tabs {
+	display: grid;
+	grid-auto-flow: column;
+	grid-auto-columns: max-content;
+	grid-row-start: 1;
+	grid-column: 2 / span 2;
+
+	border-bottom: var(--border-base);
+
+	&__tab {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		place-items: center;
+		gap: 0.5rem;
+		padding-left: 0.75rem;
+		padding-right: 0.5 + 0.125rem;
+
+		border-right: var(--border-base);
+
+		color: hsla(var(--clr-secondary-0-alpha), 0.75);
+	}
+
+	&__close {
+		display: grid;
+		place-content: center;
+		padding: 0;
+
+		svg {
+			width: 1.25rem;
+			aspect-ratio: 1;
+		}
+	}
+}
+
 .main--about-me .description {
 	display: grid;
 	grid-template-columns: 2ch 1fr;
+	grid-row-start: 2;
 	gap: 1rem;
 	padding: 1rem;
 	padding-right: 2rem;
