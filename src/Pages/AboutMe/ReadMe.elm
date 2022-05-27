@@ -1,7 +1,8 @@
 module Pages.AboutMe.ReadMe exposing (Model, Msg, page)
 
-import Browser.Dom as BrowserDom exposing (Element, Error)
-import Components.Layout as Layout exposing (initLayout)
+import Browser.Dom as BrowserDom exposing (Element, Error, Viewport, getViewport)
+import Browser.Events as BrowserEvents
+import Components.Layout as Layout exposing (footerId, headerId, headerUsernameId, initLayout, rootId)
 import Gen.Params.AboutMe.ReadMe exposing (Params)
 import Gen.Route as Route exposing (Route)
 import Html exposing (Html, div, p, span, text)
@@ -12,6 +13,7 @@ import Pages.AboutMe as AboutMe
 import Request
 import Shared
 import Task
+import Utils.Task exposing (run)
 import View exposing (View)
 
 
@@ -44,8 +46,10 @@ init route =
         ( aboutMeModel_, aboutMeCmd_ ) =
             AboutMe.init route
     in
-    ( { -- Init
+    ( { -- Models
         aboutMeModel = aboutMeModel_
+
+      -- Size
       , description = 0
       }
     , Cmd.batch
@@ -65,6 +69,7 @@ type Msg
       AboutMeMsg AboutMe.Msg
       -- Elements
     | GetDescription (Result Error Element)
+    | UpdateValuesOnResize
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -91,6 +96,20 @@ update msg model =
                     , Cmd.none
                     )
 
+        UpdateValuesOnResize ->
+            ( model
+            , List.map (Cmd.map AboutMeMsg)
+                [ AboutMe.getElements AboutMe.Root rootId
+                , AboutMe.getElements AboutMe.RootHeader headerId
+                , AboutMe.getElements AboutMe.RootFooter footerId
+                , AboutMe.getElements AboutMe.RootHeaderUsername headerUsernameId
+                ]
+                ++ [ BrowserDom.getElement descriptionId
+                        |> Task.attempt GetDescription
+                   ]
+                |> Cmd.batch
+            )
+
 
 
 -- SUBSCRIPTIONS
@@ -98,7 +117,8 @@ update msg model =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.none
+    BrowserEvents.onResize <|
+        \_ _ -> UpdateValuesOnResize
 
 
 
@@ -118,8 +138,8 @@ view model =
                 |> List.map (Attributes.map AboutMeMsg)
 
         aboutMeSideBar =
-            AboutMe.viewSidebar model.aboutMeModel
-                |> Html.map AboutMeMsg
+            AboutMe.viewPageContent model.aboutMeModel
+                |> List.map (Html.map AboutMeMsg)
     in
     { title = aboutMeView.title ++ " - Kelpie"
     , body =
@@ -129,7 +149,7 @@ view model =
                 , mainAttrs = aboutMeAttrs
                 , mainContent =
                     aboutMeSideBar
-                        :: viewPage model
+                        ++ viewPage model
             }
     }
 

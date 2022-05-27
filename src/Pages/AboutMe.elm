@@ -1,6 +1,18 @@
-module Pages.AboutMe exposing (Model, Msg, init, page, update, view, viewAttrs, viewSidebar)
+module Pages.AboutMe exposing
+    ( Model
+    , Msg
+    , RootPart(..)
+    , getElements
+    , init
+    , page
+    , update
+    , view
+    , viewAttrs
+    , viewPageContent
+    )
 
 import Browser.Dom as BrowserDom exposing (Element, Error)
+import Browser.Events as BrowserEvents
 import Components.Layout as Layout exposing (footerId, headerId, headerUsernameId, initLayout, rootId)
 import Components.Svg as SVG
 import Gen.Params.AboutMe exposing (Params)
@@ -10,6 +22,7 @@ import Html.Attributes exposing (attribute, class, classList, href, id)
 import Html.Attributes.Aria exposing (ariaLabelledby)
 import Html.Events exposing (onClick)
 import List exposing (singleton)
+import List.Extra as ListExtra
 import Page
 import Platform exposing (Task)
 import Process
@@ -45,6 +58,9 @@ type alias Model =
     , showExplorer : Bool
     , showFolder : Folders
 
+    -- Tabs
+    , tabs : List Route
+
     -- Other Pages
     , route : Route
     }
@@ -67,9 +83,16 @@ type alias RootElements =
 
 init : Route -> ( Model, Cmd Msg )
 init route_ =
-    ( { showExplorer = True
+    ( { -- Elements Size
+        rootElements = initElements
+      , -- Explorer toggles
+        showExplorer = True
       , showFolder = initFolders
-      , rootElements = initElements
+
+      -- Tabs
+      , tabs = []
+
+      -- Other Pages
       , route = route_
       }
     , Cmd.batch
@@ -127,6 +150,7 @@ type Msg
     | ToggleProject Bool
       -- Other Pages
     | ChangeUrl Route
+    | RemoveTab Route
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -269,7 +293,17 @@ update msg model =
             )
 
         ChangeUrl route_ ->
-            ( { model | route = route_ }, Cmd.none )
+            ( { model
+                | route = route_
+                , tabs = ListExtra.unique model.tabs ++ singleton route_
+              }
+            , Cmd.none
+            )
+
+        RemoveTab route_ ->
+            ( { model | tabs = ListExtra.remove route_ model.tabs }
+            , Cmd.none
+            )
 
 
 
@@ -320,9 +354,13 @@ viewPage model =
         { initLayout
             | route = Route.AboutMe
             , mainAttrs = viewAttrs model
-            , mainContent =
-                singleton <| viewSidebar model
+            , mainContent = viewPageContent model
         }
+
+
+viewPageContent : Model -> List (Html Msg)
+viewPageContent model =
+    [ viewSidebar model, viewTabs model ]
 
 
 viewAttrs : Model -> List (Attribute Msg)
@@ -363,6 +401,23 @@ viewAttrs model =
     [ checkCustomProp "header-username" <| elements.headerUsername + 1
     , checkCustomProp "main-height" calcMaxHeight
     ]
+
+
+viewTabs : Model -> Html Msg
+viewTabs model =
+    ul [ class "tabs" ] <|
+        List.map
+            (\r_ ->
+                li [ class "tabs__tab" ]
+                    [ routePagesString r_
+                    , button
+                        [ class "tabs__close"
+                        , onClick <| RemoveTab r_
+                        ]
+                        [ SVG.x ]
+                    ]
+            )
+            model.tabs
 
 
 viewSidebar : Model -> Html Msg
@@ -462,12 +517,20 @@ viewDirectory folderName msg showFiles files =
         ]
 
 
+aboutMeRouteSize : Int
+aboutMeRouteSize =
+    String.length (Route.toHref Route.AboutMe) + 1
+
+
+routePagesString : Route -> Html msg
+routePagesString route =
+    Route.toHref route
+        |> String.dropLeft aboutMeRouteSize
+        |> text
+
+
 viewListFiles : Model -> Route -> Html Msg
 viewListFiles model filename =
-    let
-        aboutSize =
-            String.length (Route.toHref Route.AboutMe) + 1
-    in
     li [ class "file" ]
         [ a
             [ classList
@@ -480,9 +543,6 @@ viewListFiles model filename =
             , onClick <| ChangeUrl filename
             ]
             [ SVG.markdown
-            , -- |>
-              Route.toHref filename
-                |> String.dropLeft aboutSize
-                |> text
+            , routePagesString filename
             ]
         ]
