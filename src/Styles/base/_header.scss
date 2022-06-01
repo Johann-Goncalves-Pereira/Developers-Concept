@@ -130,6 +130,7 @@
 
 			&:last-child {
 				grid-column-start: -1;
+				border-top-right-radius: var(--radius-local-4);
 			}
 		}
 
@@ -137,6 +138,7 @@
 			display: block;
 			padding: 1rem;
 			padding-right: 1.25rem;
+			border-radius: inherit;
 
 			color: var(--clr-secondary-0);
 
@@ -160,7 +162,8 @@
 				--bg-py-hover: 3rem;
 			}
 
-			&:hover {
+			&:hover,
+			&:focus {
 				background-position-y: var(--bg-py-base);
 				color: var(--clr-secondary-3);
 			}

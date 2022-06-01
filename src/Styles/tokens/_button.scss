@@ -48,7 +48,11 @@
 		transition: opacity 100ms var(--ease-elastic-1);
 	}
 
-	:is(&:focus, &:hover) > svg {
-		opacity: 1;
+	:is(&:focus, &:hover) {
+		color: var(--clr-secondary-3);
+
+		> svg {
+			opacity: 1;
+		}
 	}
 }
