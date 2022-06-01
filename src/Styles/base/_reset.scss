@@ -58,9 +58,9 @@ time, mark, audio, video;
 }
 
 /* A elements that don't have a class get default styles */
-a:not([class]) {
-	// text-decoration-skip-ink: auto;
-}
+// a:not([class]) {
+// text-decoration-skip-ink: auto;
+// }
 
 /* Make images easier to work with */
 :where(img, picture) {
@@ -70,7 +70,10 @@ a:not([class]) {
 
 //& Personal
 :where(:focus) {
-	outline: 0;
+	$offset: 3px;
+	$c: var(--clr-accent-0);
+	outline: $offset dashed $c;
+	outline-offset: -$offset;
 }
 
 :where(::placeholder) {
