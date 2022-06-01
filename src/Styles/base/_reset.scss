@@ -70,7 +70,7 @@ time, mark, audio, video;
 
 //& Personal
 :where(:focus) {
-	$offset: 3px;
+	$offset: 1px;
 	$c: var(--clr-accent-0);
 	outline: $offset dashed $c;
 	outline-offset: -$offset;
